@@ -1,0 +1,27 @@
+{
+  "name": "cloud-collaboration-platform",
+  "version": "1.0.0",
+  "description": "Cloud-based collaboration tool with real-time editing, AI assistance, and version control",
+  "main": "index.js",
+  "scripts": {
+    "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install && cd ../ai-service && pip install -r requirements.txt",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\" \"npm run dev:ai\"",
+    "dev:frontend": "cd frontend && npm start",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:ai": "cd ai-service && python app.py",
+    "build": "cd frontend && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "collaboration",
+    "real-time",
+    "document-editor",
+    "AI",
+    "cloud-storage"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
