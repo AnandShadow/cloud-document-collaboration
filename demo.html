@@ -1811,14 +1811,28 @@
                 console.log('Save response data:', data);
                 
                 if (data.success) {
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString();
+                    
                     if (isAutoSave) {
-                        console.log('✅ Auto-save completed successfully');
-                        showNotification('🔄 Auto-saved', 'success');
+                        console.log('✅ Auto-save completed successfully at', timeString);
+                        // Silent auto-save - just update visual indicator briefly
+                        const statusElement = document.getElementById('autoSaveStatus');
+                        if (statusElement) {
+                            const originalHTML = statusElement.innerHTML;
+                            statusElement.innerHTML = `✅ Saved at ${timeString}`;
+                            statusElement.style.color = '#10b981';
+                            
+                            // Revert back to countdown after 2 seconds
+                            setTimeout(() => {
+                                statusElement.innerHTML = originalHTML;
+                            }, 2000);
+                        }
                     } else {
                         showNotification('✅ Document saved successfully!', 'success');
                     }
-                    const now = new Date();
-                    document.getElementById('lastActivity').textContent = now.toLocaleTimeString();
+                    
+                    document.getElementById('lastActivity').textContent = timeString;
                     loadDocuments();
                 } else {
                     showNotification('❌ Failed to save document', 'error');
