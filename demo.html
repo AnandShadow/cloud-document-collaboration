@@ -9,96 +9,274 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #8b5cf6 100%);
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(30, 58, 138, 0.2) 0%, transparent 50%);
+            animation: float 15s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
         }
 
         .navbar {
-            background: white;
-            padding: 15px 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            z-index: 10;
+            border-bottom: 3px solid #3b82f6;
         }
 
         .navbar h1 {
-            color: #667eea;
-            font-size: 1.8rem;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
+            background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 2px solid #e0e7ff;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
         }
 
         .status-dot {
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            background: #48bb78;
+            background: #10b981;
             animation: pulse 2s infinite;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
         }
 
         .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 30px;
+            position: relative;
+            z-index: 1;
         }
 
         .dashboard {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.15),
+                0 0 0 1px rgba(255,255,255,0.5) inset;
             margin-bottom: 30px;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .dashboard-header h2 {
+            font-size: 1.8rem;
+            color: #1e293b;
+            font-weight: 700;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+            border-radius: 15px;
+            border: 1px solid #e0e7ff;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .documents-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
             margin-top: 20px;
         }
 
         .doc-card {
-            background: #f7fafc;
-            border-radius: 12px;
-            padding: 20px;
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border-radius: 16px;
+            padding: 25px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid #e5e7eb;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .doc-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .doc-card:hover::before {
+            transform: scaleX(1);
         }
 
         .doc-card:hover {
-            transform: translateY(-5px);
-            border-color: #667eea;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            transform: translateY(-8px) scale(1.02);
+            border-color: #3b82f6;
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.3);
         }
 
         .doc-card h3 {
-            color: #2d3748;
-            margin-bottom: 10px;
+            color: #1e293b;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
         }
 
         .doc-card p {
-            color: #718096;
+            color: #64748b;
             font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .doc-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .doc-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
         }
 
         .editor-container {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 
+                0 20px 60px rgba(0,0,0,0.15),
+                0 0 0 1px rgba(255,255,255,0.5) inset;
             display: none;
+            animation: slideUp 0.6s ease-out;
         }
 
         .editor-container.active {
@@ -109,98 +287,179 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid #e5e7eb;
+            background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+            padding: 20px 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
         }
 
         .editor-title {
-            font-size: 1.5rem;
-            color: #2d3748;
+            font-size: 1.6rem;
+            color: #1e293b;
             border: none;
             outline: none;
             width: 60%;
+            background: transparent;
+            font-weight: 700;
+            padding: 8px 12px;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .editor-title:focus {
+            border-bottom-color: #3b82f6;
         }
 
         .editor-actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
+            align-items: center;
         }
 
         .btn {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
         }
 
         .btn-primary {
-            background: #667eea;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
             color: white;
         }
 
         .btn-primary:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
         }
 
         .btn-secondary {
-            background: #e2e8f0;
-            color: #2d3748;
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            color: #1e293b;
         }
 
         .btn-secondary:hover {
-            background: #cbd5e0;
+            background: linear-gradient(135deg, #e2e8f0, #cbd5e0);
         }
 
         .btn-success {
-            background: #48bb78;
+            background: linear-gradient(135deg, #10b981, #059669);
             color: white;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #059669, #047857);
         }
 
         .btn-danger {
-            background: #f56565;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
             color: white;
         }
 
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+        }
+
         #editor {
-            height: 400px;
+            height: 450px;
             background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        #editor:focus-within {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .ql-toolbar {
+            border-radius: 15px 15px 0 0 !important;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9) !important;
+            border: 2px solid #e5e7eb !important;
+            border-bottom: none !important;
+        }
+
+        .ql-container {
+            border-radius: 0 0 15px 15px !important;
+            border: 2px solid #e5e7eb !important;
+            border-top: none !important;
+            font-size: 16px;
         }
 
         .active-users {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            padding: 15px;
-            background: #f7fafc;
-            border-radius: 8px;
+            gap: 12px;
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+            border-radius: 15px;
+            border: 1px solid #e0e7ff;
+            align-items: center;
         }
 
-        .user-badge {
-            padding: 8px 15px;
-            background: #667eea;
-            color: white;
-            border-radius: 20px;
+        .active-users-label {
+            font-weight: 600;
+            color: #64748b;
             font-size: 0.9rem;
         }
 
+        .user-badge {
+            padding: 10px 18px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .create-doc {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
             color: white;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             font-size: 3rem;
-            min-height: 150px;
+            min-height: 180px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .create-doc::after {
+            content: '+ New Document';
+            position: absolute;
+            bottom: 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         .create-doc:hover {
-            opacity: 0.9;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            transform: translateY(-8px) scale(1.02) !important;
         }
 
         .stats {
@@ -211,34 +470,50 @@
         }
 
         .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
         }
 
         .stat-card h3 {
-            color: #718096;
+            color: #64748b;
             font-size: 0.9rem;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .stat-card .value {
-            color: #667eea;
-            font-size: 2rem;
-            font-weight: bold;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.2rem;
+            font-weight: 800;
         }
 
         .notification {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 30px;
+            right: 30px;
             background: white;
-            padding: 15px 25px;
-            border-radius: 8px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            padding: 18px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             display: none;
-            animation: slideIn 0.3s ease;
+            animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            border-left: 4px solid #3b82f6;
+            font-weight: 500;
         }
 
         .notification.show {
@@ -246,67 +521,838 @@
         }
 
         @keyframes slideIn {
-            from { transform: translateX(400px); }
-            to { transform: translateX(0); }
+            from { 
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .editor-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e5e7eb;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .last-saved {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .create-doc > div {
+            font-size: 1rem;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        /* AI Suggestions Panel */
+        .ai-panel {
+            position: fixed;
+            right: 30px;
+            top: 100px;
+            width: 380px;
+            max-height: 70vh;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            border: 2px solid #e5e7eb;
+        }
+
+        .ai-panel.show {
+            display: flex;
+            animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .ai-panel-header {
+            padding: 20px 25px;
+            border-bottom: 2px solid #e5e7eb;
+            background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ai-panel-header h3 {
+            font-size: 1.1rem;
+            color: #1e293b;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .ai-close-btn:hover {
+            background: #e5e7eb;
+            color: #1e293b;
+        }
+
+        .ai-panel-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .ai-suggestion-item {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .ai-suggestion-item:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .ai-suggestion-original {
+            background: #fef2f2;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border-left: 3px solid #ef4444;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #991b1b;
+        }
+
+        .ai-suggestion-new {
+            background: #f0fdf4;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border-left: 3px solid #10b981;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #065f46;
+        }
+
+        .ai-suggestion-reason {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+
+        .ai-suggestion-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .ai-apply-btn {
+            flex: 1;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .ai-apply-btn:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-1px);
+        }
+
+        .ai-dismiss-btn {
+            padding: 8px 16px;
+            background: #f1f5f9;
+            color: #64748b;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .ai-dismiss-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .ai-loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+        }
+
+        .ai-spinner {
+            border: 3px solid #e5e7eb;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .ai-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+        }
+
+        .btn-ai {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+        }
+
+        .btn-ai:hover {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+        }
+
+        /* Share Modal Styles */
+        .share-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .share-modal.show {
+            display: flex;
+        }
+
+        .share-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .share-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .share-modal-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .share-close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #94a3b8;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .share-close-btn:hover {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .share-link-container {
+            background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+            border: 2px solid #dbeafe;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .share-link-input {
+            flex: 1;
+            border: none;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #1e293b;
+        }
+
+        .copy-link-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .copy-link-btn:hover {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .copy-link-btn.copied {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .share-option-btn {
+            padding: 15px;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .share-option-btn:hover {
+            background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .share-option-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        /* Real-time Collaboration Indicators */
+        .user-cursor {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            pointer-events: none;
+            z-index: 1000;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+
+        .user-cursor-label {
+            position: absolute;
+            top: -20px;
+            left: 2px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .active-users-list {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .user-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+            border: 2px solid #93c5fd;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1e40af;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .user-badge-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .change-highlight {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            animation: highlightFade 2s ease;
+        }
+
+        @keyframes highlightFade {
+            0% { background: #fef3c7; }
+            100% { background: transparent; }
+        }
+
+        .typing-indicator {
+            display: inline-block;
+            padding: 4px 10px;
+            background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: #1e40af;
+            margin-left: 10px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Download Modal Styles */
+        .download-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .download-modal.show {
+            display: flex;
+        }
+
+        .download-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .download-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .download-modal-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .download-format-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .download-format-btn {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .download-format-btn:hover {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        .download-format-icon {
+            font-size: 2rem;
+        }
+
+        .download-format-desc {
+            font-size: 0.75rem;
+            font-weight: 400;
+            opacity: 0.7;
+            text-align: center;
+        }
+
+        .download-info-box {
+            background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .download-info-box h4 {
+            margin: 0 0 10px 0;
+            font-size: 0.9rem;
+            color: #1e40af;
+        }
+
+        .download-info-box ul {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 0.85rem;
+            color: #475569;
+        }
+
+        .download-info-box li {
+            margin-bottom: 5px;
+        }
+
+        /* Print Styles for PDF Export */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            
+            .editor-container,
+            .editor-container * {
+                visibility: visible;
+            }
+            
+            .editor-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            
+            .editor-header,
+            .editor-actions,
+            .navbar,
+            .active-users,
+            .notification,
+            .share-modal,
+            .download-modal,
+            .ai-panel {
+                display: none !important;
+            }
+            
+            #editor {
+                border: none;
+                box-shadow: none;
+                padding: 20px;
+            }
+            
+            .editor-title {
+                border: none;
+                font-size: 2rem;
+                font-weight: bold;
+                margin-bottom: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="navbar">
-        <h1>🚀 CollabDocs</h1>
+        <h1>
+            <div class="logo-icon">C</div>
+            CollabDocs
+        </h1>
         <div class="user-info">
             <div class="status-dot"></div>
-            <span>Demo User</span>
-            <span style="color: #48bb78; font-weight: 600;">● Live</span>
+            <div class="user-avatar">D</div>
+            <span style="font-weight: 600; color: #1e293b;">Demo User</span>
         </div>
     </div>
 
     <div class="container">
-        <div class="stats">
-            <div class="stat-card">
-                <h3>Total Documents</h3>
-                <div class="value" id="totalDocs">0</div>
+        <!-- Dashboard View -->
+        <div id="dashboard" class="dashboard">
+            <div class="dashboard-header">
+                <h2>📁 My Documents</h2>
             </div>
-            <div class="stat-card">
-                <h3>Active Users</h3>
-                <div class="value">1</div>
-            </div>
-            <div class="stat-card">
-                <h3>Last Saved</h3>
-                <div class="value" style="font-size: 1.2rem;" id="lastSaved">Never</div>
-            </div>
-        </div>
 
-        <div class="dashboard" id="dashboard">
-            <h2 style="margin-bottom: 20px; color: #2d3748;">My Documents</h2>
-            <div class="documents-grid" id="documentsGrid">
-                <div class="doc-card create-doc" onclick="createDocument()">
-                    <div>+ New Document</div>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-label">Total Documents</span>
+                    <span class="stat-value" id="totalDocs">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Active Now</span>
+                    <span class="stat-value">1</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Last Activity</span>
+                    <span class="stat-value" style="font-size: 1rem;" id="lastActivity">Just now</span>
                 </div>
             </div>
+
+            <div class="documents-grid" id="documentsGrid">
+                <!-- Documents will be loaded here -->
+            </div>
         </div>
 
+        <!-- Editor View -->
         <div class="editor-container" id="editorContainer">
             <div class="editor-header">
                 <input type="text" class="editor-title" id="docTitle" placeholder="Untitled Document" value="Untitled Document">
                 <div class="editor-actions">
-                    <button class="btn btn-success" onclick="saveDocument()">💾 Save</button>
-                    <button class="btn btn-secondary" onclick="closeEditor()">← Back</button>
+                    <button class="btn btn-primary" onclick="shareDocument()" title="Share this document">
+                        🔗 Share
+                    </button>
+                    <button class="btn btn-success" onclick="downloadDocument()" title="Download document">
+                        📥 Download
+                    </button>
+                    <button class="btn btn-ai" onclick="requestAIProofread()">
+                        🤖 AI Proofread
+                    </button>
+                    <button class="btn btn-success" onclick="saveDocument()">
+                        💾 Save
+                    </button>
+                    <button class="btn btn-secondary" onclick="closeEditor()">
+                        ← Back
+                    </button>
                 </div>
             </div>
             <div id="editor"></div>
             <div class="active-users">
-                <span style="color: #718096; font-weight: 600;">Active:</span>
-                <div class="user-badge">👤 You</div>
+                <span class="active-users-label">👥 Active Users:</span>
+                <div class="user-badge">
+                    <span>�</span>
+                    <span>You (Demo User)</span>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="notification" id="notification"></div>
 
+    <!-- AI Suggestions Panel -->
+    <div class="ai-panel" id="aiPanel">
+        <div class="ai-panel-header">
+            <h3>🤖 AI Suggestions</h3>
+            <button class="ai-close-btn" onclick="closeAIPanel()">×</button>
+        </div>
+        <div class="ai-panel-body" id="aiPanelBody">
+            <!-- Suggestions will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Share Document Modal -->
+    <div class="share-modal" id="shareModal">
+        <div class="share-modal-content">
+            <div class="share-modal-header">
+                <h3>🔗 Share Document</h3>
+                <button class="share-close-btn" onclick="closeShareModal()">×</button>
+            </div>
+            
+            <p style="color: #64748b; margin-bottom: 15px;">Anyone with this link can view and edit this document in real-time.</p>
+            
+            <div class="share-link-container">
+                <input type="text" class="share-link-input" id="shareLinkInput" readonly>
+                <button class="copy-link-btn" id="copyLinkBtn" onclick="copyShareLink()">
+                    📋 Copy
+                </button>
+            </div>
+
+            <div style="margin: 20px 0; padding: 15px; background: linear-gradient(135deg, #dbeafe, #e0e7ff); border-radius: 12px; border-left: 4px solid #3b82f6;">
+                <p style="margin: 0; font-size: 0.9rem; color: #1e40af;">
+                    <strong>💡 Real-time Collaboration:</strong><br>
+                    Share this link to collaborate in real-time! Others will see:
+                </p>
+                <ul style="margin: 10px 0 0 20px; font-size: 0.85rem; color: #1e40af;">
+                    <li>Live text changes as you type</li>
+                    <li>Your cursor position</li>
+                    <li>Who's currently editing</li>
+                    <li>Instant updates</li>
+                </ul>
+            </div>
+
+            <div class="share-options">
+                <button class="share-option-btn" onclick="shareViaEmail()">
+                    <div class="share-option-icon">📧</div>
+                    Email
+                </button>
+                <button class="share-option-btn" onclick="shareViaWhatsApp()">
+                    <div class="share-option-icon">💬</div>
+                    WhatsApp
+                </button>
+                <button class="share-option-btn" onclick="shareViaSlack()">
+                    <div class="share-option-icon">💼</div>
+                    Slack
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Download Modal -->
+    <div id="downloadModal" class="download-modal">
+        <div class="download-modal-content">
+            <div class="download-modal-header">
+                <h3>📥 Download Document</h3>
+                <button class="share-close-btn" onclick="closeDownloadModal()">×</button>
+            </div>
+            <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 15px;">
+                Choose your preferred format to download the document
+            </p>
+            
+            <div class="download-format-grid">
+                <button class="download-format-btn" onclick="downloadAs('docx')">
+                    <div class="download-format-icon">📄</div>
+                    <div>Word (.docx)</div>
+                    <div class="download-format-desc">Microsoft Word format</div>
+                </button>
+                
+                <button class="download-format-btn" onclick="downloadAs('pdf')">
+                    <div class="download-format-icon">📕</div>
+                    <div>PDF (.pdf)</div>
+                    <div class="download-format-desc">Portable Document Format</div>
+                </button>
+                
+                <button class="download-format-btn" onclick="downloadAs('txt')">
+                    <div class="download-format-icon">📝</div>
+                    <div>Text (.txt)</div>
+                    <div class="download-format-desc">Plain text format</div>
+                </button>
+                
+                <button class="download-format-btn" onclick="downloadAs('html')">
+                    <div class="download-format-icon">🌐</div>
+                    <div>HTML (.html)</div>
+                    <div class="download-format-desc">Web page format</div>
+                </button>
+                
+                <button class="download-format-btn" onclick="downloadAs('md')">
+                    <div class="download-format-icon">📋</div>
+                    <div>Markdown (.md)</div>
+                    <div class="download-format-desc">Markdown format</div>
+                </button>
+                
+                <button class="download-format-btn" onclick="downloadAs('json')">
+                    <div class="download-format-icon">{ }</div>
+                    <div>JSON (.json)</div>
+                    <div class="download-format-desc">Quill Delta format</div>
+                </button>
+            </div>
+
+            <div class="download-info-box">
+                <h4>📌 Download Features:</h4>
+                <ul>
+                    <li>All formats preserve your content</li>
+                    <li>Rich text formatting maintained (where supported)</li>
+                    <li>Instant download - no server processing</li>
+                    <li>Your data stays private</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script>
+        console.log('🚀 CollabDocs Demo Starting...');
+        
         const API_URL = 'http://localhost:5000';
         let socket;
         let quill;
@@ -315,19 +1361,28 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            initializeEditor();
-            connectSocket();
-            loadDocuments();
+            console.log('✅ DOM Content Loaded');
+            try {
+                initializeEditor();
+                connectSocket();
+                loadDocuments();
+                console.log('✅ All initialization complete');
+            } catch (error) {
+                console.error('❌ Initialization error:', error);
+                showNotification('Failed to initialize app: ' + error.message, 'error');
+            }
         });
 
         function initializeEditor() {
-            quill = new Quill('#editor', {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        ['bold', 'italic', 'underline', 'strike'],
-                        ['blockquote', 'code-block'],
-                        [{ 'header': 1 }, { 'header': 2 }],
+            console.log('📝 Initializing Quill editor...');
+            try {
+                quill = new Quill('#editor', {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [
+                            ['bold', 'italic', 'underline', 'strike'],
+                            ['blockquote', 'code-block'],
+                            [{ 'header': 1 }, { 'header': 2 }],
                         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                         [{ 'indent': '-1'}, { 'indent': '+1' }],
                         ['link', 'image'],
@@ -338,6 +1393,7 @@
 
             quill.on('text-change', (delta, oldDelta, source) => {
                 if (source === 'user' && currentDocId && socket) {
+                    console.log('📤 Emitting document change for:', currentDocId);
                     socket.emit('document-change', {
                         documentId: currentDocId,
                         content: quill.root.innerHTML,
@@ -345,13 +1401,21 @@
                     });
                 }
             });
+            
+            console.log('✅ Quill editor initialized');
+            } catch (error) {
+                console.error('❌ Quill initialization failed:', error);
+                throw error;
+            }
         }
 
         function connectSocket() {
-            socket = io(API_URL);
+            console.log('🔌 Connecting to Socket.IO...');
+            try {
+                socket = io(API_URL);
             
-            socket.on('connect', () => {
-                console.log('Socket connected');
+                socket.on('connect', () => {
+                    console.log('✅ Socket connected successfully');
                 showNotification('✅ Connected to server!', 'success');
                 document.querySelector('.status-dot').style.background = '#48bb78';
             });
@@ -369,25 +1433,35 @@
             });
 
             socket.on('document-update', (data) => {
+                console.log('📥 Received document update');
                 if (data.content) {
                     quill.root.innerHTML = data.content;
                 }
             });
 
             socket.on('user-joined', (data) => {
+                console.log('👤 User joined:', data.userName);
                 showNotification(`${data.userName} joined`, 'info');
             });
+            
+            console.log('✅ Socket.IO event handlers registered');
+            } catch (error) {
+                console.error('❌ Socket connection failed:', error);
+                showNotification('Failed to connect to server', 'error');
+            }
         }
 
         async function loadDocuments() {
             try {
-                console.log('Loading documents from:', `${API_URL}/api/documents`);
+                console.log('📂 Loading documents from:', `${API_URL}/api/documents`);
                 const response = await fetch(`${API_URL}/api/documents`);
+                console.log('Response status:', response.status);
                 const data = await response.json();
-                console.log('Documents loaded:', data);
+                console.log('✅ Documents loaded:', data);
                 documents = data.documents || [];
                 renderDocuments();
                 document.getElementById('totalDocs').textContent = documents.length;
+                console.log(`📊 Total documents: ${documents.length}`);
             } catch (error) {
                 console.error('Error loading documents:', error);
                 showNotification('Error loading documents - Check if backend is running', 'error');
@@ -395,20 +1469,49 @@
         }
 
         function renderDocuments() {
-            const grid = document.getElementById('documentsGrid');
-            grid.innerHTML = '<div class="doc-card create-doc" onclick="createDocument()"><div>+ New Document</div></div>';
+            console.log('🎨 Rendering documents grid...');
+            try {
+                const grid = document.getElementById('documentsGrid');
+                if (!grid) {
+                    console.error('❌ Documents grid element not found!');
+                    return;
+                }
+                
+                grid.innerHTML = '<div class="doc-card create-doc" onclick="createDocument()"><div>📄</div></div>';
             
-            documents.forEach(doc => {
-                const card = document.createElement('div');
-                card.className = 'doc-card';
-                card.onclick = () => openDocument(doc.id);
-                card.innerHTML = `
-                    <h3>${doc.title}</h3>
-                    <p>Created: ${new Date(doc.createdAt).toLocaleDateString()}</p>
-                    <p style="margin-top: 5px;">Updated: ${new Date(doc.updatedAt).toLocaleString()}</p>
-                `;
-                grid.appendChild(card);
-            });
+                documents.forEach(doc => {
+                    const card = document.createElement('div');
+                    card.className = 'doc-card';
+                    card.onclick = () => openDocument(doc.id);
+                    
+                    const docIcon = document.createElement('div');
+                    docIcon.className = 'doc-icon';
+                    docIcon.textContent = '📄';
+                    
+                    const title = document.createElement('h3');
+                    title.textContent = doc.title;
+                    
+                    const createdDate = document.createElement('p');
+                    createdDate.textContent = `Created: ${new Date(doc.createdAt).toLocaleDateString()}`;
+                    
+                    const footer = document.createElement('div');
+                    footer.className = 'doc-card-footer';
+                    footer.innerHTML = `
+                        <small style="color: #94a3b8;">📅 ${new Date(doc.updatedAt).toLocaleDateString()}</small>
+                        <small style="color: #3b82f6; font-weight: 600;">Open →</small>
+                    `;
+                    
+                    card.appendChild(docIcon);
+                    card.appendChild(title);
+                    card.appendChild(createdDate);
+                    card.appendChild(footer);
+                    grid.appendChild(card);
+                });
+                console.log('✅ Documents rendered successfully');
+            } catch (error) {
+                console.error('❌ Error rendering documents:', error);
+                showNotification('Error displaying documents: ' + error.message, 'error');
+            }
         }
 
         async function createDocument() {
@@ -439,9 +1542,13 @@
 
         async function openDocument(docId) {
             try {
+                console.log('Opening document:', docId);
                 const response = await fetch(`${API_URL}/api/documents/${docId}`);
                 const data = await response.json();
+                console.log('Document data received:', data);
+                
                 currentDocId = docId;
+                console.log('currentDocId set to:', currentDocId);
                 
                 document.getElementById('docTitle').value = data.document.title;
                 quill.root.innerHTML = data.document.content;
@@ -454,54 +1561,814 @@
                     userId: 'demo-user',
                     userName: 'Demo User'
                 });
+                
+                console.log('Document opened successfully');
             } catch (error) {
-                showNotification('Error opening document', 'error');
+                console.error('Error opening document:', error);
+                showNotification('Error opening document: ' + error.message, 'error');
             }
         }
 
         async function saveDocument() {
-            if (!currentDocId) return;
+            console.log('Save button clicked! currentDocId:', currentDocId);
+            
+            if (!currentDocId) {
+                console.error('No document ID - cannot save');
+                showNotification('⚠️ No document open to save!', 'error');
+                return;
+            }
             
             try {
+                console.log('Saving document:', currentDocId);
+                const title = document.getElementById('docTitle').value;
+                const content = quill.root.innerHTML;
+                console.log('Title:', title, 'Content length:', content.length);
+                
                 const response = await fetch(`${API_URL}/api/documents/${currentDocId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        title: document.getElementById('docTitle').value,
-                        content: quill.root.innerHTML
+                        title: title,
+                        content: content
                     })
                 });
+                
+                console.log('Save response status:', response.status);
                 const data = await response.json();
+                console.log('Save response data:', data);
+                
                 if (data.success) {
-                    showNotification('Document saved!', 'success');
-                    document.getElementById('lastSaved').textContent = new Date().toLocaleTimeString();
+                    showNotification('✅ Document saved successfully!', 'success');
+                    const now = new Date();
+                    document.getElementById('lastActivity').textContent = now.toLocaleTimeString();
                     loadDocuments();
+                } else {
+                    showNotification('❌ Failed to save document', 'error');
                 }
             } catch (error) {
-                showNotification('Error saving document', 'error');
+                console.error('Error saving document:', error);
+                showNotification('❌ Error saving: ' + error.message, 'error');
             }
         }
 
         function closeEditor() {
-            if (currentDocId && socket) {
-                socket.emit('leave-document', {
-                    documentId: currentDocId,
-                    userId: 'demo-user'
-                });
+            console.log('🔙 Closing editor, currentDocId:', currentDocId);
+            try {
+                if (currentDocId && socket) {
+                    console.log('Leaving document room:', currentDocId);
+                    socket.emit('leave-document', {
+                        documentId: currentDocId,
+                        userId: 'demo-user'
+                    });
+                }
+                currentDocId = null;
+                console.log('currentDocId reset to null');
+                
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('editorContainer').classList.remove('active');
+                console.log('✅ Editor closed successfully');
+            } catch (error) {
+                console.error('❌ Error closing editor:', error);
+                showNotification('Error closing editor: ' + error.message, 'error');
             }
-            currentDocId = null;
-            document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('editorContainer').classList.remove('active');
         }
 
         function showNotification(message, type = 'info') {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.style.background = type === 'success' ? '#48bb78' : type === 'error' ? '#f56565' : '#667eea';
-            notification.style.color = 'white';
-            notification.classList.add('show');
-            setTimeout(() => notification.classList.remove('show'), 5000);
+            console.log('📢 Notification:', message, 'Type:', type);
+            try {
+                const notification = document.getElementById('notification');
+                if (!notification) {
+                    console.error('Notification element not found!');
+                    return;
+                }
+                
+                notification.textContent = message;
+                notification.style.background = type === 'success' ? '#48bb78' : type === 'error' ? '#f56565' : '#667eea';
+                notification.style.color = 'white';
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 5000);
+                
+                console.log('✅ Notification displayed');
+            } catch (error) {
+                console.error('❌ Error showing notification:', error);
+            }
         }
+
+        // ==================== AI INTEGRATION ====================
+
+        async function requestAIProofread() {
+            console.log('🤖 AI Proofread requested');
+            
+            try {
+                const text = quill.getText().trim();
+                
+                if (!text || text.length < 10) {
+                    showNotification('⚠️ Please write at least 10 characters to proofread', 'error');
+                    return;
+                }
+
+                // Show AI panel with loading state
+                const panel = document.getElementById('aiPanel');
+                const panelBody = document.getElementById('aiPanelBody');
+                
+                panel.classList.add('show');
+                panelBody.innerHTML = `
+                    <div class="ai-loading">
+                        <div class="ai-spinner"></div>
+                        <p>🤖 Analyzing with FREE AI...</p>
+                        <small>Trying Groq → LanguageTool → OpenAI</small>
+                    </div>
+                `;
+
+                console.log('🤖 AI Proofread requested, text length:', text.length);
+
+                // Try FREE AI services in order of preference
+                const endpoints = [
+                    { url: '/api/ai/proofread-groq', name: 'Groq (Ultra-Fast)' },
+                    { url: '/api/ai/proofread-languagetool', name: 'LanguageTool (Free)' },
+                    { url: '/api/ai/proofread-cloud', name: 'OpenAI (Fallback)' }
+                ];
+
+                let lastError = null;
+                let successData = null;
+
+                for (const endpoint of endpoints) {
+                    try {
+                        console.log(`🔄 Trying ${endpoint.name}...`);
+                        
+                        const response = await fetch(`${API_URL}${endpoint.url}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ 
+                                text: text,
+                                mode: 'grammar'
+                            })
+                        });
+
+                        console.log(`Response from ${endpoint.name}:`, response.status);
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            console.log(`✅ Success with ${endpoint.name}:`, data);
+                            
+                            if (data.ok) {
+                                successData = data;
+                                showNotification(`✅ Analysis complete using ${data.provider || endpoint.name}`, 'success');
+                                break; // Success! Exit loop
+                            }
+                        } else {
+                            console.log(`⚠️ ${endpoint.name} returned ${response.status}, trying next...`);
+                        }
+                    } catch (error) {
+                        console.log(`⚠️ ${endpoint.name} failed:`, error.message);
+                        lastError = error;
+                        continue; // Try next endpoint
+                    }
+                }
+
+                // Check if any service succeeded
+                if (!successData) {
+                    throw lastError || new Error('All AI services are temporarily unavailable');
+                }
+
+                const data = successData;
+                console.log('AI response data:', data);
+
+                if (!data.ok) {
+                    throw new Error(data.error || 'AI service error');
+                }
+
+                // Pass metadata along with suggestions for comprehensive display
+                const metadata = {
+                    readabilityScore: data.readabilityScore,
+                    overallTone: data.overallTone,
+                    styleRecommendations: data.styleRecommendations,
+                    provider: data.provider
+                };
+
+                displayAISuggestions(data.suggestions || [], metadata);
+                
+                if (!data.suggestions || data.suggestions.length === 0) {
+                    showNotification('✅ No issues found! Your text looks great.', 'success');
+                }
+
+            } catch (error) {
+                console.error('❌ AI proofread error:', error);
+                
+                const panelBody = document.getElementById('aiPanelBody');
+                
+                // Check if it's a rate limit error
+                if (error.message.includes('Rate limit') || error.message.includes('429')) {
+                    showNotification('⏳ Rate limit hit. Please wait 30 seconds and try again.', 'warning');
+                    panelBody.innerHTML = `
+                        <div class="ai-empty">
+                            <p style="font-size: 2rem; margin-bottom: 10px;">⏳</p>
+                            <p><strong>Rate Limit Reached</strong></p>
+                            <p style="font-size: 0.9rem; margin-top: 10px; color: #94a3b8;">
+                                OpenAI has temporary rate limits. Please wait 30 seconds and try again.
+                            </p>
+                            <button onclick="closeAIPanel()" style="margin-top: 20px; padding: 10px 20px; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem;">
+                                Got it
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    showNotification('❌ AI service error: ' + error.message, 'error');
+                    panelBody.innerHTML = `
+                        <div class="ai-empty">
+                            <p style="font-size: 2rem; margin-bottom: 10px;">⚠️</p>
+                            <p><strong>AI Service Error</strong></p>
+                            <p style="font-size: 0.9rem; margin-top: 10px;">${error.message}</p>
+                            <p style="font-size: 0.85rem; margin-top: 10px; color: #94a3b8;">
+                                Make sure OPENAI_API_KEY is set and your API key has available credits.
+                            </p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function displayAISuggestions(suggestions, metadata = {}) {
+            console.log('🎨 Displaying comprehensive AI suggestions, count:', suggestions.length);
+            console.log('📊 Metadata:', metadata);
+            
+            const panelBody = document.getElementById('aiPanelBody');
+            
+            if (!suggestions || suggestions.length === 0) {
+                panelBody.innerHTML = `
+                    <div class="ai-empty">
+                        <p style="font-size: 2rem; margin-bottom: 10px;">✅</p>
+                        <p><strong>No Issues Found!</strong></p>
+                        <p style="font-size: 0.9rem; margin-top: 10px;">Your text looks great.</p>
+                        ${metadata.readabilityScore ? `<p style="font-size: 0.85rem; margin-top: 10px; color: #10b981;"><strong>Readability Score: ${metadata.readabilityScore}/100</strong></p>` : ''}
+                    </div>
+                `;
+                return;
+            }
+
+            // Display overall stats at top
+            let statsHTML = '';
+            if (metadata.readabilityScore || metadata.overallTone) {
+                statsHTML = `
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 12px; margin-bottom: 15px;">
+                        <h4 style="margin: 0 0 10px 0; font-size: 0.9rem;">📊 Document Analysis</h4>
+                        ${metadata.readabilityScore ? `<p style="margin: 5px 0; font-size: 0.85rem;">✅ Readability: ${metadata.readabilityScore}/100</p>` : ''}
+                        ${metadata.overallTone ? `<p style="margin: 5px 0; font-size: 0.85rem;">🎭 Tone: ${metadata.overallTone}</p>` : ''}
+                        ${metadata.provider ? `<p style="margin: 5px 0; font-size: 0.75rem; opacity: 0.9;">🤖 ${metadata.provider}</p>` : ''}
+                    </div>
+                `;
+            }
+
+            // Group suggestions by type
+            const groupedSuggestions = {};
+            suggestions.forEach(s => {
+                const type = s.type || s.category || 'other';
+                if (!groupedSuggestions[type]) groupedSuggestions[type] = [];
+                groupedSuggestions[type].push(s);
+            });
+
+            // Generate HTML for each group
+            let suggestionsHTML = statsHTML;
+            
+            Object.keys(groupedSuggestions).forEach(type => {
+                const items = groupedSuggestions[type];
+                const typeEmoji = {
+                    'grammar': '📝',
+                    'spelling': '✍️',
+                    'misspelling': '✍️',
+                    'style': '🎨',
+                    'formatting': '📐',
+                    'tone': '🎭',
+                    'punctuation': '⚡',
+                    'Grammar': '📝',
+                    'Spell': '✍️',
+                    'Style': '🎨',
+                    'Punctuation': '⚡'
+                };
+                const emoji = typeEmoji[type] || '📌';
+                
+                suggestionsHTML += `
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="font-size: 0.85rem; color: #64748b; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;">
+                            ${emoji} ${type} (${items.length})
+                        </h4>
+                `;
+                
+                items.forEach((suggestion, index) => {
+                    const globalIndex = suggestions.indexOf(suggestion);
+                    const severityColor = {
+                        'high': '#dc2626',
+                        'medium': '#ea580c',
+                        'low': '#eab308'
+                    }[suggestion.severity || 'medium'];
+                    
+                    suggestionsHTML += `
+                        <div class="ai-suggestion-item" style="border-left: 3px solid ${severityColor};">
+                            ${suggestion.severity ? `<span style="display: inline-block; background: ${severityColor}; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; margin-bottom: 8px;">${suggestion.severity.toUpperCase()}</span>` : ''}
+                            
+                            <div class="ai-suggestion-original">
+                                <strong>Current:</strong> <span style="${suggestion.formatting ? `color: ${suggestion.formatting.color}; text-decoration: ${suggestion.formatting.textDecoration || 'none'};` : ''}">${escapeHtml(suggestion.original)}</span>
+                            </div>
+                            
+                            <div class="ai-suggestion-new">
+                                <strong>Suggested:</strong> ${escapeHtml(suggestion.suggestion)}
+                                ${suggestion.formatting && suggestion.formatting.fontSize ? `
+                                    <div style="margin-top: 5px; font-size: 0.75rem; color: #64748b;">
+                                        💡 Style: ${suggestion.formatting.fontSize} ${suggestion.formatting.fontWeight || ''} ${suggestion.formatting.color || ''}
+                                    </div>
+                                ` : ''}
+                            </div>
+                            
+                            <div class="ai-suggestion-reason">
+                                <em>${escapeHtml(suggestion.reason)}</em>
+                            </div>
+                            
+                            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                                <button onclick="applyAISuggestion(${globalIndex})" class="ai-apply-btn">
+                                    ✓ Apply
+                                </button>
+                                <button onclick="dismissAISuggestion(${globalIndex})" class="ai-dismiss-btn">
+                                    ✕ Dismiss
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                suggestionsHTML += `</div>`;
+            });
+
+            // Add style recommendations section if available
+            if (metadata.styleRecommendations) {
+                const style = metadata.styleRecommendations;
+                suggestionsHTML += `
+                    <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 15px; border-radius: 12px; margin-top: 15px;">
+                        <h4 style="margin: 0 0 10px 0; font-size: 0.9rem;">🎨 Document Styling Recommendations</h4>
+                        ${style.headingFont ? `<p style="margin: 5px 0; font-size: 0.8rem;">📌 Headings: ${style.headingFont}</p>` : ''}
+                        ${style.bodyFont ? `<p style="margin: 5px 0; font-size: 0.8rem;">📄 Body: ${style.bodyFont}</p>` : ''}
+                        ${style.emphasisColor ? `<p style="margin: 5px 0; font-size: 0.8rem;">⭐ Emphasis: <span style="color: ${style.emphasisColor}; background: white; padding: 2px 6px; border-radius: 3px;">${style.emphasisColor}</span></p>` : ''}
+                        ${style.sentenceComplexity ? `<p style="margin: 5px 0; font-size: 0.8rem;">💡 ${style.sentenceComplexity}</p>` : ''}
+                        ${style.paragraphLength ? `<p style="margin: 5px 0; font-size: 0.8rem;">📏 ${style.paragraphLength}</p>` : ''}
+                    </div>
+                `;
+            }
+
+            panelBody.innerHTML = suggestionsHTML;
+
+            // Store suggestions for apply/dismiss
+            window.currentAISuggestions = suggestions;
+        }
+
+        function applyAISuggestion(index) {
+            console.log('✓ Applying AI suggestion:', index);
+            
+            try {
+                const suggestion = window.currentAISuggestions[index];
+                if (!suggestion) {
+                    console.error('Suggestion not found');
+                    return;
+                }
+
+                // Get current text
+                const text = quill.getText();
+                
+                // Find and replace the original text with suggestion
+                const start = suggestion.start || 0;
+                const end = suggestion.end || start + (suggestion.original?.length || 0);
+                
+                // Delete old text and insert new
+                quill.deleteText(start, end - start);
+                quill.insertText(start, suggestion.suggestion);
+                
+                showNotification('✅ Suggestion applied!', 'success');
+                
+                // Remove applied suggestion from list
+                dismissAISuggestion(index);
+                
+            } catch (error) {
+                console.error('❌ Error applying suggestion:', error);
+                showNotification('❌ Failed to apply suggestion', 'error');
+            }
+        }
+
+        function dismissAISuggestion(index) {
+            console.log('✗ Dismissing suggestion:', index);
+            
+            // Remove suggestion from array
+            if (window.currentAISuggestions) {
+                window.currentAISuggestions.splice(index, 1);
+                displayAISuggestions(window.currentAISuggestions);
+                
+                if (window.currentAISuggestions.length === 0) {
+                    closeAIPanel();
+                }
+            }
+        }
+
+        function closeAIPanel() {
+            console.log('🔒 Closing AI panel');
+            const panel = document.getElementById('aiPanel');
+            panel.classList.remove('show');
+            window.currentAISuggestions = [];
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ===== REAL-TIME COLLABORATION & SHARING FUNCTIONS =====
+
+        function shareDocument() {
+            console.log('🔗 Opening share modal');
+            
+            if (!currentDocId) {
+                showNotification('⚠️ Please save the document first', 'error');
+                return;
+            }
+
+            // Generate shareable link
+            const shareLink = `${window.location.origin}${window.location.pathname}?doc=${currentDocId}`;
+            document.getElementById('shareLinkInput').value = shareLink;
+            
+            // Show modal
+            document.getElementById('shareModal').classList.add('show');
+            
+            showNotification('🔗 Share link generated!', 'success');
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.remove('show');
+        }
+
+        function copyShareLink() {
+            const input = document.getElementById('shareLinkInput');
+            input.select();
+            input.setSelectionRange(0, 99999); // For mobile
+            
+            navigator.clipboard.writeText(input.value).then(() => {
+                const btn = document.getElementById('copyLinkBtn');
+                btn.textContent = '✅ Copied!';
+                btn.classList.add('copied');
+                
+                showNotification('✅ Link copied to clipboard!', 'success');
+                
+                setTimeout(() => {
+                    btn.textContent = '📋 Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                showNotification('❌ Failed to copy link', 'error');
+            });
+        }
+
+        function shareViaEmail() {
+            const link = document.getElementById('shareLinkInput').value;
+            const subject = encodeURIComponent('Collaborate on my document');
+            const body = encodeURIComponent(`Hi!\n\nI'd like to collaborate with you on a document. Click this link to view and edit in real-time:\n\n${link}\n\nBest regards`);
+            window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
+        }
+
+        function shareViaWhatsApp() {
+            const link = document.getElementById('shareLinkInput').value;
+            const text = encodeURIComponent(`Check out this document and collaborate in real-time: ${link}`);
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
+
+        function shareViaSlack() {
+            const link = document.getElementById('shareLinkInput').value;
+            showNotification('💡 Copy the link and paste it in your Slack channel!', 'info');
+            copyShareLink();
+        }
+
+        // ===== DOCUMENT DOWNLOAD FUNCTIONS =====
+
+        function downloadDocument() {
+            console.log('📥 Opening download modal');
+            
+            if (!currentDocId) {
+                showNotification('⚠️ Please save the document first', 'error');
+                return;
+            }
+
+            // Show download modal
+            document.getElementById('downloadModal').classList.add('show');
+            showNotification('📥 Choose your download format', 'info');
+        }
+
+        function closeDownloadModal() {
+            document.getElementById('downloadModal').classList.remove('show');
+        }
+
+        function downloadAs(format) {
+            const title = document.getElementById('docTitle').value || 'Untitled Document';
+            const content = quill.root.innerHTML;
+            const plainText = quill.getText();
+            const delta = quill.getContents();
+            
+            let blob, filename, mimeType;
+            
+            switch(format) {
+                case 'txt':
+                    blob = new Blob([plainText], { type: 'text/plain' });
+                    filename = `${title}.txt`;
+                    mimeType = 'text/plain';
+                    break;
+                    
+                case 'html':
+                    const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>${title}</h1>
+    <div>${content}</div>
+    <hr>
+    <p style="color: #7f8c8d; font-size: 0.9em;">Generated by CollabDocs on ${new Date().toLocaleString()}</p>
+</body>
+</html>`;
+                    blob = new Blob([htmlContent], { type: 'text/html' });
+                    filename = `${title}.html`;
+                    mimeType = 'text/html';
+                    break;
+                    
+                case 'json':
+                    const jsonData = {
+                        title: title,
+                        content: content,
+                        plainText: plainText,
+                        delta: delta,
+                        metadata: {
+                            created: new Date().toISOString(),
+                            documentId: currentDocId,
+                            version: '1.0',
+                            format: 'quill-delta'
+                        }
+                    };
+                    blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
+                    filename = `${title}.json`;
+                    mimeType = 'application/json';
+                    break;
+                    
+                case 'md':
+                    // Convert HTML to Markdown (basic conversion)
+                    let markdown = plainText;
+                    // This is a simple conversion - you could use a library for better results
+                    markdown = `# ${title}\n\n${markdown}\n\n---\n*Generated by CollabDocs on ${new Date().toLocaleDateString()}*`;
+                    blob = new Blob([markdown], { type: 'text/markdown' });
+                    filename = `${title}.md`;
+                    mimeType = 'text/markdown';
+                    break;
+                    
+                case 'docx':
+                    showNotification('📄 DOCX export coming soon! Using HTML for now...', 'info');
+                    // For now, provide HTML which can be opened in Word
+                    const docxHtml = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>${title}</title>
+</head>
+<body>
+    <h1>${title}</h1>
+    ${content}
+</body>
+</html>`;
+                    blob = new Blob([docxHtml], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+                    filename = `${title}.html`;
+                    mimeType = 'text/html';
+                    break;
+                    
+                case 'pdf':
+                    showNotification('📕 PDF export: Use browser Print → Save as PDF', 'info');
+                    // Open print dialog for PDF
+                    setTimeout(() => {
+                        window.print();
+                    }, 500);
+                    closeDownloadModal();
+                    return;
+                    
+                default:
+                    showNotification('❌ Unsupported format', 'error');
+                    return;
+            }
+            
+            // Create download link
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            // Show success notification
+            showNotification(`✅ Downloaded as ${filename}`, 'success');
+            closeDownloadModal();
+            
+            console.log(`📥 Downloaded: ${filename} (${format})`);
+        }
+
+        // Enhanced Socket.IO for real-time collaboration
+        function setupRealtimeCollaboration() {
+            if (!socket) return;
+
+            // Join document room
+            socket.emit('join-document', {
+                documentId: currentDocId,
+                userName: 'Demo User',
+                userColor: '#3b82f6'
+            });
+
+            // Listen for other users' changes
+            socket.on('document-update', (data) => {
+                console.log('📥 Real-time update from another user:', data);
+                
+                if (data.userId !== socket.id && data.content) {
+                    // Update editor without losing cursor position
+                    const currentSelection = quill.getSelection();
+                    quill.root.innerHTML = data.content;
+                    if (currentSelection) {
+                        quill.setSelection(currentSelection);
+                    }
+                    
+                    // Highlight changes
+                    highlightChanges(data.changeRange);
+                    
+                    showNotification(`✏️ ${data.userName} made changes`, 'info');
+                }
+            });
+
+            // Listen for cursor positions
+            socket.on('cursor-update', (data) => {
+                if (data.userId !== socket.id) {
+                    showUserCursor(data);
+                }
+            });
+
+            // Listen for users joining
+            socket.on('user-joined', (data) => {
+                console.log('👤 User joined:', data.userName);
+                updateActiveUsers(data.users);
+                showNotification(`👋 ${data.userName} joined the document`, 'info');
+            });
+
+            // Listen for users leaving
+            socket.on('user-left', (data) => {
+                console.log('👋 User left:', data.userName);
+                updateActiveUsers(data.users);
+                showNotification(`👋 ${data.userName} left the document`, 'info');
+            });
+
+            // Send updates when typing
+            quill.on('text-change', (delta, oldDelta, source) => {
+                if (source === 'user') {
+                    socket.emit('document-change', {
+                        documentId: currentDocId,
+                        content: quill.root.innerHTML,
+                        delta: delta,
+                        userName: 'Demo User'
+                    });
+                }
+            });
+
+            // Send cursor position
+            quill.on('selection-change', (range, oldRange, source) => {
+                if (range && source === 'user') {
+                    socket.emit('cursor-move', {
+                        documentId: currentDocId,
+                        range: range,
+                        userName: 'Demo User',
+                        userColor: '#3b82f6'
+                    });
+                }
+            });
+        }
+
+        function showUserCursor(data) {
+            // Remove existing cursor for this user
+            const existingCursor = document.querySelector(`[data-user-id="${data.userId}"]`);
+            if (existingCursor) {
+                existingCursor.remove();
+            }
+
+            // Create cursor element
+            const cursor = document.createElement('div');
+            cursor.className = 'user-cursor';
+            cursor.dataset.userId = data.userId;
+            cursor.style.backgroundColor = data.userColor || '#8b5cf6';
+
+            // Create label
+            const label = document.createElement('div');
+            label.className = 'user-cursor-label';
+            label.textContent = data.userName;
+            label.style.background = data.userColor || '#8b5cf6';
+            
+            cursor.appendChild(label);
+            
+            // Position cursor (simplified - would need actual position calculation)
+            cursor.style.top = '100px';
+            cursor.style.left = '200px';
+            
+            document.querySelector('.editor-container').appendChild(cursor);
+
+            // Remove after 5 seconds of inactivity
+            setTimeout(() => cursor.remove(), 5000);
+        }
+
+        function highlightChanges(range) {
+            if (!range) return;
+            
+            // Add highlight class to changed text
+            quill.formatText(range.index, range.length, 'background', '#fef3c7');
+            
+            // Remove highlight after 2 seconds
+            setTimeout(() => {
+                quill.formatText(range.index, range.length, 'background', false);
+            }, 2000);
+        }
+
+        function updateActiveUsers(users) {
+            const container = document.querySelector('.active-users');
+            if (!container) return;
+
+            let usersHTML = '<span class="active-users-label">👥 Active Users:</span><div class="active-users-list">';
+            
+            users.forEach(user => {
+                const initial = user.name ? user.name[0].toUpperCase() : '?';
+                const color = user.color || '#3b82f6';
+                usersHTML += `
+                    <div class="user-badge">
+                        <div class="user-badge-avatar" style="background: ${color};">${initial}</div>
+                        <span>${user.name}</span>
+                        ${user.isTyping ? '<span class="typing-indicator">typing...</span>' : ''}
+                    </div>
+                `;
+            });
+            
+            usersHTML += '</div>';
+            container.innerHTML = usersHTML;
+        }
+
+        // Check if document ID is in URL (shared link)
+        function checkForSharedDocument() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const docId = urlParams.get('doc');
+            
+            if (docId) {
+                console.log('📄 Opening shared document:', docId);
+                showNotification('📄 Loading shared document...', 'info');
+                
+                // Find and open the document
+                const doc = documents.find(d => d.id === docId);
+                if (doc) {
+                    openDocument(doc.id);
+                    showNotification('✅ Joined shared document!', 'success');
+                } else {
+                    // Try to load from server
+                    setTimeout(() => {
+                        loadDocuments().then(() => {
+                            const foundDoc = documents.find(d => d.id === docId);
+                            if (foundDoc) {
+                                openDocument(foundDoc.id);
+                                showNotification('✅ Joined shared document!', 'success');
+                            } else {
+                                showNotification('⚠️ Document not found', 'error');
+                            }
+                        });
+                    }, 1000);
+                }
+            }
+        }
+
+        // Initialize shared document on load
+        window.addEventListener('DOMContentLoaded', () => {
+            checkForSharedDocument();
+        });
     </script>
 </body>
 </html>

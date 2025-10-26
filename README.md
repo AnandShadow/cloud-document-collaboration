@@ -6,7 +6,29 @@ A comprehensive cloud-based collaboration tool featuring real-time document edit
 ![Node](https://img.shields.io/badge/node-%3E%3D14.0.0-green.svg)
 ![Python](https://img.shields.io/badge/python-%3E%3D3.8-blue.svg)
 
-## 🌟 Features
+## � Latest Updates (v2.0)
+
+### ✨ New Features Added:
+- **🔗 Real-Time Collaboration** - Live text sync, cursor tracking, user presence indicators
+- **📥 Document Download** - Export to 6 formats (Word, PDF, Text, HTML, Markdown, JSON)
+- **🤖 Enhanced AI** - 3 FREE providers (Groq, LanguageTool, OpenAI), 6 error types, styling suggestions
+- **📱 Share Documents** - Shareable links with Email/WhatsApp/Slack integration
+
+**📚 See detailed guides:**
+- `REAL_TIME_TEST_GUIDE.md` - Real-time collaboration testing
+- `DOWNLOAD_FEATURE_GUIDE.md` - Download functionality
+- `AI_INTEGRATION_GUIDE.md` - AI setup and usage
+
+**🚀 Quick Start:**
+```bash
+cd backend
+npm install
+$env:GROQ_API_KEY="your_key_here"  # Get free at console.groq.com/keys
+node server-demo.js
+# Open demo.html in browser
+```
+
+## �🌟 Features
 
 ### Real-Time Collaboration
 - ✅ Multi-user simultaneous editing

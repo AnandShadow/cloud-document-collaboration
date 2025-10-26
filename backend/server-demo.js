@@ -23,6 +23,10 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Mount AI routes
+const aiRoutes = require('./routes/ai');
+app.use('/api/ai', aiRoutes);
+
 // In-memory storage for demo
 const documents = new Map();
 const users = new Map();
@@ -135,45 +139,138 @@ app.post('/api/ai/recommend', (req, res) => {
 
 // Socket.IO for real-time collaboration
 const activeUsers = new Map();
+const userColors = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'];
 
 io.on('connection', (socket) => {
-  console.log('User connected:', socket.id);
+  console.log('✅ User connected:', socket.id);
 
-  socket.on('join-document', ({ documentId, userId, userName }) => {
-    console.log(`User ${userName} joined document ${documentId}`);
+  socket.on('join-document', ({ documentId, userId, userName, userColor }) => {
+    console.log(`👤 User ${userName} (${socket.id}) joined document ${documentId}`);
     socket.join(documentId);
     
-    if (!activeUsers.has(documentId)) {
-      activeUsers.set(documentId, new Set());
+    // Assign random color if not provided
+    if (!userColor) {
+      userColor = userColors[Math.floor(Math.random() * userColors.length)];
     }
-    activeUsers.get(documentId).add({ userId, userName, socketId: socket.id });
     
-    io.to(documentId).emit('user-joined', { userId, userName });
-    io.to(documentId).emit('active-users', Array.from(activeUsers.get(documentId) || []));
+    // Store user info
+    if (!activeUsers.has(documentId)) {
+      activeUsers.set(documentId, new Map());
+    }
+    activeUsers.get(documentId).set(socket.id, { 
+      userId: userId || socket.id, 
+      userName: userName || 'Anonymous', 
+      socketId: socket.id,
+      userColor: userColor,
+      isTyping: false
+    });
+    
+    // Get all users in this document
+    const users = Array.from(activeUsers.get(documentId).values());
+    
+    // Notify others that user joined
+    socket.to(documentId).emit('user-joined', { 
+      userId: userId || socket.id, 
+      userName: userName || 'Anonymous',
+      userColor: userColor,
+      users: users
+    });
+    
+    // Send current users list to the new user
+    socket.emit('active-users', { users: users });
+    
+    console.log(`📊 Active users in ${documentId}:`, users.length);
   });
 
-  socket.on('document-change', ({ documentId, content, delta, userId }) => {
-    socket.to(documentId).emit('document-update', { content, delta, userId });
+  socket.on('document-change', ({ documentId, content, delta, userName }) => {
+    console.log(`📝 Document update in ${documentId} by ${userName}`);
+    
+    // Broadcast to all other users in the room
+    socket.to(documentId).emit('document-update', { 
+      content, 
+      delta, 
+      userId: socket.id,
+      userName: userName || 'Anonymous',
+      timestamp: Date.now(),
+      changeRange: delta ? { index: delta.ops?.[0]?.retain || 0, length: delta.ops?.length || 1 } : null
+    });
+  });
+
+  socket.on('cursor-move', ({ documentId, range, userName, userColor }) => {
+    console.log(`🖱️ Cursor move in ${documentId} by ${userName}`);
+    
+    // Broadcast cursor position to others
+    socket.to(documentId).emit('cursor-update', {
+      userId: socket.id,
+      userName: userName || 'Anonymous',
+      userColor: userColor || '#3b82f6',
+      range: range,
+      timestamp: Date.now()
+    });
+  });
+
+  socket.on('typing-start', ({ documentId, userName }) => {
+    console.log(`⌨️ ${userName} started typing in ${documentId}`);
+    
+    if (activeUsers.has(documentId) && activeUsers.get(documentId).has(socket.id)) {
+      const user = activeUsers.get(documentId).get(socket.id);
+      user.isTyping = true;
+    }
+    
+    socket.to(documentId).emit('user-typing', {
+      userId: socket.id,
+      userName: userName || 'Anonymous',
+      isTyping: true
+    });
+  });
+
+  socket.on('typing-stop', ({ documentId }) => {
+    if (activeUsers.has(documentId) && activeUsers.get(documentId).has(socket.id)) {
+      const user = activeUsers.get(documentId).get(socket.id);
+      user.isTyping = false;
+    }
+    
+    socket.to(documentId).emit('user-typing', {
+      userId: socket.id,
+      isTyping: false
+    });
   });
 
   socket.on('leave-document', ({ documentId, userId }) => {
+    console.log(`👋 User ${userId} left document ${documentId}`);
     socket.leave(documentId);
+    
     if (activeUsers.has(documentId)) {
       const users = activeUsers.get(documentId);
-      activeUsers.set(documentId, new Set([...users].filter(u => u.socketId !== socket.id)));
-      io.to(documentId).emit('user-left', { userId });
-      io.to(documentId).emit('active-users', Array.from(activeUsers.get(documentId) || []));
+      const user = users.get(socket.id);
+      users.delete(socket.id);
+      
+      // Notify others
+      socket.to(documentId).emit('user-left', { 
+        userId: userId || socket.id,
+        userName: user?.userName || 'Anonymous',
+        users: Array.from(users.values())
+      });
     }
   });
 
   socket.on('disconnect', () => {
-    console.log('User disconnected:', socket.id);
+    console.log('❌ User disconnected:', socket.id);
+    
+    // Remove user from all documents they were in
     activeUsers.forEach((users, documentId) => {
-      const user = [...users].find(u => u.socketId === socket.id);
-      if (user) {
-        activeUsers.set(documentId, new Set([...users].filter(u => u.socketId !== socket.id)));
-        io.to(documentId).emit('user-left', { userId: user.userId });
-        io.to(documentId).emit('active-users', Array.from(activeUsers.get(documentId) || []));
+      if (users.has(socket.id)) {
+        const user = users.get(socket.id);
+        users.delete(socket.id);
+        
+        // Notify others in the document
+        io.to(documentId).emit('user-left', { 
+          userId: user.userId,
+          userName: user.userName,
+          users: Array.from(users.values())
+        });
+        
+        console.log(`📊 Users remaining in ${documentId}:`, users.size);
       }
     });
   });
