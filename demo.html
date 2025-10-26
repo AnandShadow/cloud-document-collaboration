@@ -1353,7 +1353,13 @@
     <script>
         console.log('🚀 CollabDocs Demo Starting...');
         
-        const API_URL = 'http://localhost:5000';
+        // API URL - Change this after deploying backend to Railway/Render
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5000'
+            : 'https://your-backend.railway.app'; // TODO: Replace with your Railway URL
+        
+        console.log('🌐 API URL:', API_URL);
+        
         let socket;
         let quill;
         let currentDocId = null;
