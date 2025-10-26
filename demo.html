@@ -1364,6 +1364,8 @@
         let quill;
         let currentDocId = null;
         let documents = [];
+        let typingTimer = null; // Global typing debounce timer
+        const TYPING_DELAY = 300; // Wait 300ms after user stops typing
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
@@ -1397,13 +1399,31 @@
                 }
             });
 
+            // Debounced text change handler
             quill.on('text-change', (delta, oldDelta, source) => {
                 if (source === 'user' && currentDocId && socket && socket.connected) {
-                    console.log('📤 Emitting document change for:', currentDocId);
-                    socket.emit('document-change', {
+                    // Clear previous timer
+                    clearTimeout(typingTimer);
+                    
+                    // Send update after user stops typing for 300ms
+                    typingTimer = setTimeout(() => {
+                        console.log('📤 Sending batched update for:', currentDocId);
+                        socket.emit('document-change', {
+                            documentId: currentDocId,
+                            content: quill.root.innerHTML,
+                            delta: delta,
+                            userName: 'Demo User'
+                        });
+                        
+                        // Stop typing indicator
+                        socket.emit('typing-stop', {
+                            documentId: currentDocId
+                        });
+                    }, TYPING_DELAY);
+                    
+                    // Show typing indicator immediately (optional)
+                    socket.emit('typing-start', {
                         documentId: currentDocId,
-                        content: quill.root.innerHTML,
-                        delta: delta,
                         userName: 'Demo User'
                     });
                 }
@@ -1442,15 +1462,29 @@
             socket.on('document-update', (data) => {
                 console.log('📥 Received document update from:', data.userName);
                 if (data.content && data.userId !== socket.id) {
-                    // Save current cursor position
+                    // Don't update if user is actively typing (has selection/focus)
                     const currentSelection = quill.getSelection();
+                    const hasFocus = quill.hasFocus();
                     
-                    // Update content
+                    // Update content only if different
                     const oldContent = quill.root.innerHTML;
                     if (oldContent !== data.content) {
+                        // If user is typing, queue the update for later
+                        if (hasFocus && currentSelection) {
+                            console.log('⏸️ User is typing, queuing update...');
+                            // Apply update after a short delay
+                            setTimeout(() => {
+                                if (!quill.hasFocus()) {
+                                    quill.root.innerHTML = data.content;
+                                }
+                            }, 500);
+                            return;
+                        }
+                        
+                        // Safe to update immediately
                         quill.root.innerHTML = data.content;
                         
-                        // Restore cursor position if user was editing
+                        // Restore cursor if needed
                         if (currentSelection) {
                             setTimeout(() => {
                                 try {
@@ -1460,9 +1494,6 @@
                                 }
                             }, 0);
                         }
-                        
-                        // Show notification
-                        showNotification(`✏️ ${data.userName} updated the document`, 'info');
                     }
                 }
             });
@@ -1637,6 +1668,19 @@
             }
             
             try {
+                // Force immediate sync before saving
+                if (typingTimer) {
+                    clearTimeout(typingTimer);
+                    console.log('🔄 Forcing immediate sync before save...');
+                    if (socket && socket.connected) {
+                        socket.emit('document-change', {
+                            documentId: currentDocId,
+                            content: quill.root.innerHTML,
+                            userName: 'Demo User'
+                        });
+                    }
+                }
+                
                 console.log('Saving document:', currentDocId);
                 const title = document.getElementById('docTitle').value;
                 const content = quill.root.innerHTML;
