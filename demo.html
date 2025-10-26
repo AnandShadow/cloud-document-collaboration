@@ -1399,8 +1399,8 @@
                 }
             });
 
-            // Debounced text change handler
-            quill.on('text-change', (delta, oldDelta, source) => {
+            // Named text-change handler for easy re-attachment
+            const handleTextChange = (delta, oldDelta, source) => {
                 if (source === 'user' && currentDocId && socket && socket.connected) {
                     // Clear previous timer
                     clearTimeout(typingTimer);
@@ -1427,7 +1427,10 @@
                         userName: 'Demo User'
                     });
                 }
-            });
+            };
+            
+            // Attach the text-change handler
+            quill.on('text-change', handleTextChange);
             
             console.log('✅ Quill editor initialized');
             } catch (error) {
@@ -1462,35 +1465,37 @@
             socket.on('document-update', (data) => {
                 console.log('📥 Received document update from:', data.userName);
                 if (data.content && data.userId !== socket.id) {
-                    // Don't update if user is actively typing (has selection/focus)
+                    // Save current cursor position
                     const currentSelection = quill.getSelection();
-                    const hasFocus = quill.hasFocus();
                     
                     // Update content only if different
                     const oldContent = quill.root.innerHTML;
                     if (oldContent !== data.content) {
-                        // If user is typing, queue the update for later
-                        if (hasFocus && currentSelection) {
-                            console.log('⏸️ User is typing, queuing update...');
-                            // Apply update after a short delay
-                            setTimeout(() => {
-                                if (!quill.hasFocus()) {
-                                    quill.root.innerHTML = data.content;
-                                }
-                            }, 500);
-                            return;
-                        }
+                        // ALWAYS update to show real-time changes
+                        // Use Quill's native method to avoid losing focus
+                        const currentLength = quill.getLength();
                         
-                        // Safe to update immediately
+                        // Temporarily disable the text-change event to avoid loops
+                        quill.off('text-change');
+                        
+                        // Update the content
                         quill.root.innerHTML = data.content;
                         
-                        // Restore cursor if needed
+                        // Re-enable text-change event
+                        setTimeout(() => {
+                            quill.on('text-change', handleTextChange);
+                        }, 0);
+                        
+                        // Restore cursor position intelligently
                         if (currentSelection) {
                             setTimeout(() => {
                                 try {
-                                    quill.setSelection(currentSelection.index, currentSelection.length);
+                                    // If user had a selection, try to restore it
+                                    const newLength = quill.getLength();
+                                    const safeCursorPos = Math.min(currentSelection.index, newLength - 1);
+                                    quill.setSelection(safeCursorPos, 0);
                                 } catch (e) {
-                                    console.log('Could not restore cursor position');
+                                    console.log('Cursor adjusted to new content');
                                 }
                             }, 0);
                         }
