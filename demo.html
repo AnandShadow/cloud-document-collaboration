@@ -1489,6 +1489,9 @@
             // Add tooltips to toolbar buttons
             addToolbarTooltips();
             
+            // Fix links to open in new tab
+            fixLinksInEditor();
+            
             console.log('✅ Quill editor initialized');
             } catch (error) {
                 console.error('❌ Quill initialization failed:', error);
@@ -1526,6 +1529,30 @@
             });
 
             console.log('✅ Toolbar tooltips added');
+        }
+
+        function fixLinksInEditor() {
+            // Make links in the editor open in new tab
+            const editor = document.getElementById('editor');
+            
+            // Handle clicks on links
+            editor.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    e.preventDefault();
+                    const href = e.target.getAttribute('href');
+                    if (href) {
+                        // Add https:// if no protocol specified
+                        let url = href;
+                        if (!url.match(/^https?:\/\//i)) {
+                            url = 'https://' + url;
+                        }
+                        window.open(url, '_blank', 'noopener,noreferrer');
+                        console.log('🔗 Opening link:', url);
+                    }
+                }
+            });
+            
+            console.log('✅ Link handler added');
         }
 
         function connectSocket() {
