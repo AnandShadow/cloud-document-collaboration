@@ -1486,11 +1486,46 @@
             // Attach the text-change handler
             quill.on('text-change', handleTextChange);
             
+            // Add tooltips to toolbar buttons
+            addToolbarTooltips();
+            
             console.log('✅ Quill editor initialized');
             } catch (error) {
                 console.error('❌ Quill initialization failed:', error);
                 throw error;
             }
+        }
+
+        function addToolbarTooltips() {
+            // Add tooltips to all Quill toolbar buttons
+            const tooltips = {
+                '.ql-bold': 'Bold (Ctrl+B)',
+                '.ql-italic': 'Italic (Ctrl+I)',
+                '.ql-underline': 'Underline (Ctrl+U)',
+                '.ql-strike': 'Strikethrough',
+                '.ql-blockquote': 'Block Quote',
+                '.ql-code-block': 'Code Block',
+                '.ql-header[value="1"]': 'Heading 1',
+                '.ql-header[value="2"]': 'Heading 2',
+                '.ql-list[value="ordered"]': 'Numbered List',
+                '.ql-list[value="bullet"]': 'Bullet List',
+                '.ql-indent[value="-1"]': 'Decrease Indent',
+                '.ql-indent[value="+1"]': 'Increase Indent',
+                '.ql-link': 'Insert Link',
+                '.ql-image': 'Insert Image',
+                '.ql-clean': 'Clear Formatting'
+            };
+
+            // Apply tooltips
+            Object.keys(tooltips).forEach(selector => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(element => {
+                    element.setAttribute('title', tooltips[selector]);
+                    element.style.cursor = 'pointer';
+                });
+            });
+
+            console.log('✅ Toolbar tooltips added');
         }
 
         function connectSocket() {
