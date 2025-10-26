@@ -1367,6 +1367,36 @@
         let typingTimer = null; // Global typing debounce timer
         const TYPING_DELAY = 300; // Wait 300ms after user stops typing
 
+        // Named text-change handler (global scope for re-attachment)
+        const handleTextChange = (delta, oldDelta, source) => {
+            if (source === 'user' && currentDocId && socket && socket.connected) {
+                // Clear previous timer
+                clearTimeout(typingTimer);
+                
+                // Send update after user stops typing for 300ms
+                typingTimer = setTimeout(() => {
+                    console.log('📤 Sending batched update for:', currentDocId);
+                    socket.emit('document-change', {
+                        documentId: currentDocId,
+                        content: quill.root.innerHTML,
+                        delta: delta,
+                        userName: 'Demo User'
+                    });
+                    
+                    // Stop typing indicator
+                    socket.emit('typing-stop', {
+                        documentId: currentDocId
+                    });
+                }, TYPING_DELAY);
+                
+                // Show typing indicator immediately (optional)
+                socket.emit('typing-start', {
+                    documentId: currentDocId,
+                    userName: 'Demo User'
+                });
+            }
+        };
+
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             console.log('✅ DOM Content Loaded');
@@ -1399,36 +1429,6 @@
                 }
             });
 
-            // Named text-change handler for easy re-attachment
-            const handleTextChange = (delta, oldDelta, source) => {
-                if (source === 'user' && currentDocId && socket && socket.connected) {
-                    // Clear previous timer
-                    clearTimeout(typingTimer);
-                    
-                    // Send update after user stops typing for 300ms
-                    typingTimer = setTimeout(() => {
-                        console.log('📤 Sending batched update for:', currentDocId);
-                        socket.emit('document-change', {
-                            documentId: currentDocId,
-                            content: quill.root.innerHTML,
-                            delta: delta,
-                            userName: 'Demo User'
-                        });
-                        
-                        // Stop typing indicator
-                        socket.emit('typing-stop', {
-                            documentId: currentDocId
-                        });
-                    }, TYPING_DELAY);
-                    
-                    // Show typing indicator immediately (optional)
-                    socket.emit('typing-start', {
-                        documentId: currentDocId,
-                        userName: 'Demo User'
-                    });
-                }
-            };
-            
             // Attach the text-change handler
             quill.on('text-change', handleTextChange);
             
