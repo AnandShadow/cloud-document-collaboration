@@ -1369,9 +1369,13 @@
 
         // Named text-change handler (global scope for re-attachment)
         const handleTextChange = (delta, oldDelta, source) => {
+            console.log('✏️ Text change detected - Source:', source, 'DocId:', currentDocId, 'Connected:', socket?.connected);
+            
             if (source === 'user' && currentDocId && socket && socket.connected) {
                 // Clear previous timer
                 clearTimeout(typingTimer);
+                
+                console.log('⏱️ Debounce timer set (300ms)...');
                 
                 // Send update after user stops typing for 300ms
                 typingTimer = setTimeout(() => {
@@ -1463,42 +1467,50 @@
             });
 
             socket.on('document-update', (data) => {
-                console.log('📥 Received document update from:', data.userName);
-                if (data.content && data.userId !== socket.id) {
+                console.log('📥 Received document update from:', data.userName, 'userId:', data.userId, 'myId:', socket.id);
+                
+                // Skip if this is our own update
+                if (data.userId === socket.id) {
+                    console.log('⏭️ Skipping own update');
+                    return;
+                }
+                
+                if (data.content) {
                     // Save current cursor position
                     const currentSelection = quill.getSelection();
+                    console.log('💾 Current cursor position:', currentSelection?.index);
                     
                     // Update content only if different
                     const oldContent = quill.root.innerHTML;
                     if (oldContent !== data.content) {
-                        // ALWAYS update to show real-time changes
-                        // Use Quill's native method to avoid losing focus
-                        const currentLength = quill.getLength();
+                        console.log('🔄 Applying remote update...');
                         
-                        // Temporarily disable the text-change event to avoid loops
-                        quill.off('text-change');
+                        // Update using Quill's API to avoid triggering text-change
+                        // Use 'silent' source to prevent emitting changes
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = data.content;
                         
-                        // Update the content
-                        quill.root.innerHTML = data.content;
+                        // Clear and set new content silently
+                        quill.setContents([{ insert: '\n' }], 'silent');
+                        quill.clipboard.dangerouslyPasteHTML(0, data.content, 'silent');
                         
-                        // Re-enable text-change event
-                        setTimeout(() => {
-                            quill.on('text-change', handleTextChange);
-                        }, 0);
-                        
-                        // Restore cursor position intelligently
+                        // Restore cursor position
                         if (currentSelection) {
                             setTimeout(() => {
                                 try {
-                                    // If user had a selection, try to restore it
                                     const newLength = quill.getLength();
-                                    const safeCursorPos = Math.min(currentSelection.index, newLength - 1);
+                                    const safeCursorPos = Math.min(currentSelection.index, Math.max(0, newLength - 1));
+                                    console.log('📍 Restoring cursor to:', safeCursorPos);
                                     quill.setSelection(safeCursorPos, 0);
                                 } catch (e) {
-                                    console.log('Cursor adjusted to new content');
+                                    console.log('⚠️ Could not restore cursor:', e.message);
                                 }
-                            }, 0);
+                            }, 10);
                         }
+                        
+                        console.log('✅ Remote update applied');
+                    } else {
+                        console.log('⏭️ Content unchanged, skipping update');
                     }
                 }
             });
