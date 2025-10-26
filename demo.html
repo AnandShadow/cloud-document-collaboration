@@ -1235,7 +1235,7 @@
                 <div style="display: flex; flex-direction: column; gap: 4px; flex: 1;">
                     <input type="text" class="editor-title" id="docTitle" placeholder="Untitled Document" value="Untitled Document">
                     <div id="autoSaveStatus" style="font-size: 0.85rem; color: #10b981; font-weight: 500; padding-left: 4px; display: none;">
-                        🔄 Auto-save active
+                        🔄 Auto-save active (next in <span id="autoSaveCountdown">10</span>s)
                     </div>
                 </div>
                 <div class="editor-actions">
@@ -1253,8 +1253,8 @@
                             💾 Save
                         </button>
                         <select class="autosave-toggle" id="autosaveToggle" onchange="toggleAutoSave()" title="Auto-save settings">
-                            <option value="on">🔄 Auto-save: ON</option>
-                            <option value="off">⏸️ Auto-save: OFF</option>
+                            <option value="on">🔄 Auto (10s)</option>
+                            <option value="off">⏸️ Manual</option>
                         </select>
                     </div>
                     <button class="btn btn-secondary" onclick="closeEditor()">
@@ -1414,7 +1414,8 @@
         const TYPING_DELAY = 300; // Wait 300ms after user stops typing
         let autoSaveEnabled = true; // Auto-save is ON by default
         let autoSaveTimer = null; // Timer for auto-save
-        const AUTO_SAVE_INTERVAL = 30000; // Auto-save every 30 seconds
+        const AUTO_SAVE_INTERVAL = 10000; // Auto-save every 10 seconds (was 30)
+        let autoSaveCountdown = 10; // Countdown in seconds
 
         // Named text-change handler (global scope for re-attachment)
         const handleTextChange = (delta, oldDelta, source) => {
@@ -1801,8 +1802,8 @@
             autoSaveEnabled = toggle.value === 'on';
             
             if (autoSaveEnabled) {
-                console.log('🔄 Auto-save ENABLED (every 30 seconds)');
-                showNotification('🔄 Auto-save enabled - Document will save every 30 seconds', 'success');
+                console.log('🔄 Auto-save ENABLED (every 10 seconds)');
+                showNotification('🔄 Auto-save enabled - Document will save every 10 seconds', 'success');
                 if (statusIndicator) statusIndicator.style.display = 'block';
                 startAutoSave();
             } else {
@@ -1814,18 +1815,47 @@
         }
 
         function startAutoSave() {
+            console.log('🎬 startAutoSave called - autoSaveEnabled:', autoSaveEnabled, 'currentDocId:', currentDocId);
+            
             // Clear any existing timer
             stopAutoSave();
             
             // Set up new timer
             if (autoSaveEnabled && currentDocId) {
+                // Reset countdown
+                autoSaveCountdown = 10;
+                
+                // Update countdown every second
+                const countdownInterval = setInterval(() => {
+                    if (!autoSaveEnabled || !currentDocId) {
+                        clearInterval(countdownInterval);
+                        return;
+                    }
+                    
+                    autoSaveCountdown--;
+                    const countdownElement = document.getElementById('autoSaveCountdown');
+                    if (countdownElement) {
+                        countdownElement.textContent = autoSaveCountdown;
+                    }
+                    
+                    if (autoSaveCountdown <= 0) {
+                        autoSaveCountdown = 10; // Reset
+                    }
+                }, 1000);
+                
+                // Save every 10 seconds
                 autoSaveTimer = setInterval(() => {
                     if (autoSaveEnabled && currentDocId) {
                         console.log('🔄 Auto-saving document...');
                         saveDocument(true); // Pass true to indicate this is auto-save
+                        autoSaveCountdown = 10; // Reset countdown after save
                     }
                 }, AUTO_SAVE_INTERVAL);
-                console.log('✅ Auto-save timer started (30 seconds)');
+                
+                console.log('✅ Auto-save timer started (10 seconds)');
+                
+                // Store countdown interval for cleanup
+                window.autoSaveCountdownInterval = countdownInterval;
             } else {
                 console.log('⚠️ Cannot start auto-save - autoSaveEnabled:', autoSaveEnabled, 'currentDocId:', currentDocId);
             }
@@ -1836,6 +1866,12 @@
                 clearInterval(autoSaveTimer);
                 autoSaveTimer = null;
                 console.log('⏹️ Auto-save timer stopped');
+            }
+            
+            // Also clear countdown interval
+            if (window.autoSaveCountdownInterval) {
+                clearInterval(window.autoSaveCountdownInterval);
+                window.autoSaveCountdownInterval = null;
             }
         }
 
