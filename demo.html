@@ -378,6 +378,41 @@
             background: linear-gradient(135deg, #dc2626, #b91c1c);
         }
 
+        .save-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .autosave-toggle {
+            padding: 12px 16px;
+            border: 2px solid #10b981;
+            border-radius: 12px;
+            background: white;
+            color: #059669;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1);
+        }
+
+        .autosave-toggle:hover {
+            background: #f0fdf4;
+            border-color: #059669;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .autosave-toggle:focus {
+            outline: none;
+            border-color: #047857;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .autosave-toggle option {
+            padding: 10px;
+        }
+
         #editor {
             height: 450px;
             background: white;
@@ -1208,9 +1243,15 @@
                     <button class="btn btn-ai" onclick="requestAIProofread()">
                         🤖 AI Proofread
                     </button>
-                    <button class="btn btn-success" onclick="saveDocument()">
-                        💾 Save
-                    </button>
+                    <div class="save-controls">
+                        <button class="btn btn-success" onclick="saveDocument()">
+                            💾 Save
+                        </button>
+                        <select class="autosave-toggle" id="autosaveToggle" onchange="toggleAutoSave()" title="Auto-save settings">
+                            <option value="on">🔄 Auto-save: ON</option>
+                            <option value="off">⏸️ Auto-save: OFF</option>
+                        </select>
+                    </div>
                     <button class="btn btn-secondary" onclick="closeEditor()">
                         ← Back
                     </button>
@@ -1366,6 +1407,9 @@
         let documents = [];
         let typingTimer = null; // Global typing debounce timer
         const TYPING_DELAY = 300; // Wait 300ms after user stops typing
+        let autoSaveEnabled = true; // Auto-save is ON by default
+        let autoSaveTimer = null; // Timer for auto-save
+        const AUTO_SAVE_INTERVAL = 30000; // Auto-save every 30 seconds
 
         // Named text-change handler (global scope for re-attachment)
         const handleTextChange = (delta, oldDelta, source) => {
@@ -1668,6 +1712,11 @@
                     showNotification('⚠️ Real-time features unavailable - check backend connection', 'warning');
                 }
                 
+                // Start auto-save if enabled
+                if (autoSaveEnabled) {
+                    startAutoSave();
+                }
+                
                 console.log('Document opened successfully');
             } catch (error) {
                 console.error('Error opening document:', error);
@@ -1730,8 +1779,51 @@
             }
         }
 
+        function toggleAutoSave() {
+            const toggle = document.getElementById('autosaveToggle');
+            autoSaveEnabled = toggle.value === 'on';
+            
+            if (autoSaveEnabled) {
+                console.log('🔄 Auto-save ENABLED (every 30 seconds)');
+                showNotification('🔄 Auto-save enabled - Document will save every 30 seconds', 'success');
+                startAutoSave();
+            } else {
+                console.log('⏸️ Auto-save DISABLED');
+                showNotification('⏸️ Auto-save disabled - Use Save button to save manually', 'info');
+                stopAutoSave();
+            }
+        }
+
+        function startAutoSave() {
+            // Clear any existing timer
+            stopAutoSave();
+            
+            // Set up new timer
+            if (autoSaveEnabled && currentDocId) {
+                autoSaveTimer = setInterval(() => {
+                    if (autoSaveEnabled && currentDocId) {
+                        console.log('🔄 Auto-saving document...');
+                        saveDocument();
+                    }
+                }, AUTO_SAVE_INTERVAL);
+                console.log('✅ Auto-save timer started (30 seconds)');
+            }
+        }
+
+        function stopAutoSave() {
+            if (autoSaveTimer) {
+                clearInterval(autoSaveTimer);
+                autoSaveTimer = null;
+                console.log('⏹️ Auto-save timer stopped');
+            }
+        }
+
         function closeEditor() {
             console.log('🔙 Closing editor, currentDocId:', currentDocId);
+            
+            // Stop auto-save when closing editor
+            stopAutoSave();
+            
             try {
                 if (currentDocId && socket) {
                     console.log('Leaving document room:', currentDocId);
