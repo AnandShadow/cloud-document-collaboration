@@ -1398,12 +1398,13 @@
             });
 
             quill.on('text-change', (delta, oldDelta, source) => {
-                if (source === 'user' && currentDocId && socket) {
+                if (source === 'user' && currentDocId && socket && socket.connected) {
                     console.log('📤 Emitting document change for:', currentDocId);
                     socket.emit('document-change', {
                         documentId: currentDocId,
                         content: quill.root.innerHTML,
-                        delta: delta
+                        delta: delta,
+                        userName: 'Demo User'
                     });
                 }
             });
@@ -1439,15 +1440,58 @@
             });
 
             socket.on('document-update', (data) => {
-                console.log('📥 Received document update');
-                if (data.content) {
-                    quill.root.innerHTML = data.content;
+                console.log('📥 Received document update from:', data.userName);
+                if (data.content && data.userId !== socket.id) {
+                    // Save current cursor position
+                    const currentSelection = quill.getSelection();
+                    
+                    // Update content
+                    const oldContent = quill.root.innerHTML;
+                    if (oldContent !== data.content) {
+                        quill.root.innerHTML = data.content;
+                        
+                        // Restore cursor position if user was editing
+                        if (currentSelection) {
+                            setTimeout(() => {
+                                try {
+                                    quill.setSelection(currentSelection.index, currentSelection.length);
+                                } catch (e) {
+                                    console.log('Could not restore cursor position');
+                                }
+                            }, 0);
+                        }
+                        
+                        // Show notification
+                        showNotification(`✏️ ${data.userName} updated the document`, 'info');
+                    }
                 }
             });
 
             socket.on('user-joined', (data) => {
                 console.log('👤 User joined:', data.userName);
-                showNotification(`${data.userName} joined`, 'info');
+                showNotification(`👋 ${data.userName} joined the document`, 'success');
+                
+                // Update active users list if available
+                if (data.users) {
+                    updateActiveUsers(data.users);
+                }
+            });
+            
+            socket.on('user-left', (data) => {
+                console.log('👋 User left:', data.userName);
+                showNotification(`👋 ${data.userName} left the document`, 'info');
+                
+                // Update active users list if available
+                if (data.users) {
+                    updateActiveUsers(data.users);
+                }
+            });
+            
+            socket.on('active-users', (data) => {
+                console.log('👥 Active users updated:', data.users);
+                if (data.users) {
+                    updateActiveUsers(data.users);
+                }
             });
             
             console.log('✅ Socket.IO event handlers registered');
@@ -1562,11 +1606,19 @@
                 document.getElementById('dashboard').style.display = 'none';
                 document.getElementById('editorContainer').classList.add('active');
                 
-                socket.emit('join-document', {
-                    documentId: docId,
-                    userId: 'demo-user',
-                    userName: 'Demo User'
-                });
+                // Join Socket.IO room for real-time collaboration
+                if (socket && socket.connected) {
+                    socket.emit('join-document', {
+                        documentId: docId,
+                        userId: 'demo-user',
+                        userName: 'Demo User',
+                        userColor: '#3b82f6'
+                    });
+                    console.log('✅ Joined Socket.IO room for document:', docId);
+                } else {
+                    console.warn('⚠️ Socket not connected, real-time features unavailable');
+                    showNotification('⚠️ Real-time features unavailable - check backend connection', 'warning');
+                }
                 
                 console.log('Document opened successfully');
             } catch (error) {
@@ -2150,22 +2202,33 @@
                     break;
                     
                 case 'docx':
-                    showNotification('📄 DOCX export coming soon! Using HTML for now...', 'info');
-                    // For now, provide HTML which can be opened in Word
+                    // Create a simple Word-compatible HTML document
                     const docxHtml = `<!DOCTYPE html>
-<html>
+<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'>
 <head>
     <meta charset="UTF-8">
     <title>${title}</title>
+    <style>
+        body {
+            font-family: Calibri, sans-serif;
+            font-size: 11pt;
+            line-height: 1.5;
+        }
+        h1 { font-size: 18pt; font-weight: bold; margin-bottom: 12pt; }
+        p { margin-bottom: 10pt; }
+    </style>
 </head>
 <body>
     <h1>${title}</h1>
     ${content}
+    <hr>
+    <p style="font-size: 9pt; color: #666;">Generated by CollabDocs on ${new Date().toLocaleString()}</p>
 </body>
 </html>`;
-                    blob = new Blob([docxHtml], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-                    filename = `${title}.html`;
-                    mimeType = 'text/html';
+                    blob = new Blob([docxHtml], { type: 'application/msword' });
+                    filename = `${title}.doc`;
+                    mimeType = 'application/msword';
+                    showNotification('📄 Downloading Word-compatible document (.doc)', 'success');
                     break;
                     
                 case 'pdf':
@@ -2320,24 +2383,38 @@
 
         function updateActiveUsers(users) {
             const container = document.querySelector('.active-users');
-            if (!container) return;
+            if (!container) {
+                console.warn('Active users container not found');
+                return;
+            }
 
             let usersHTML = '<span class="active-users-label">👥 Active Users:</span><div class="active-users-list">';
             
-            users.forEach(user => {
-                const initial = user.name ? user.name[0].toUpperCase() : '?';
-                const color = user.color || '#3b82f6';
+            if (!users || users.length === 0) {
                 usersHTML += `
                     <div class="user-badge">
-                        <div class="user-badge-avatar" style="background: ${color};">${initial}</div>
-                        <span>${user.name}</span>
-                        ${user.isTyping ? '<span class="typing-indicator">typing...</span>' : ''}
+                        <div class="user-badge-avatar" style="background: #3b82f6;">D</div>
+                        <span>You (Demo User)</span>
                     </div>
                 `;
-            });
+            } else {
+                users.forEach(user => {
+                    const userName = user.userName || user.name || 'Anonymous';
+                    const initial = userName[0].toUpperCase();
+                    const color = user.userColor || user.color || '#3b82f6';
+                    usersHTML += `
+                        <div class="user-badge">
+                            <div class="user-badge-avatar" style="background: ${color};">${initial}</div>
+                            <span>${userName}</span>
+                            ${user.isTyping ? '<span class="typing-indicator">typing...</span>' : ''}
+                        </div>
+                    `;
+                });
+            }
             
             usersHTML += '</div>';
             container.innerHTML = usersHTML;
+            console.log('✅ Updated active users list:', users ? users.length : 0, 'users');
         }
 
         // Check if document ID is in URL (shared link)
