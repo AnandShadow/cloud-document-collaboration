@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "name": "collabdocs",
+  "builds": [
+    {
+      "src": "backend/server-demo.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "backend/server-demo.js"
+    },
+    {
+      "src": "/socket.io/(.*)",
+      "dest": "backend/server-demo.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "backend/server-demo.js"
+    }
+  ]
+}

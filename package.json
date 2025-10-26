@@ -9,7 +9,8 @@
     "dev:frontend": "cd frontend && npm start",
     "dev:backend": "cd backend && npm run dev",
     "dev:ai": "cd ai-service && python app.py",
-    "build": "cd frontend && npm run build",
+    "build": "echo 'Static HTML - No build needed'",
+    "start": "cd backend && node server-demo.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
