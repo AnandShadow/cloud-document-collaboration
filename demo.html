@@ -1816,18 +1816,7 @@
                     
                     if (isAutoSave) {
                         console.log('✅ Auto-save completed successfully at', timeString);
-                        // Silent auto-save - just update visual indicator briefly
-                        const statusElement = document.getElementById('autoSaveStatus');
-                        if (statusElement) {
-                            const originalHTML = statusElement.innerHTML;
-                            statusElement.innerHTML = `✅ Saved at ${timeString}`;
-                            statusElement.style.color = '#10b981';
-                            
-                            // Revert back to countdown after 2 seconds
-                            setTimeout(() => {
-                                statusElement.innerHTML = originalHTML;
-                            }, 2000);
-                        }
+                        // Completely silent auto-save - no visual changes
                     } else {
                         showNotification('✅ Document saved successfully!', 'success');
                     }
