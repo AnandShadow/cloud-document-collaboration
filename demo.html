@@ -1232,7 +1232,12 @@
         <!-- Editor View -->
         <div class="editor-container" id="editorContainer">
             <div class="editor-header">
-                <input type="text" class="editor-title" id="docTitle" placeholder="Untitled Document" value="Untitled Document">
+                <div style="display: flex; flex-direction: column; gap: 4px; flex: 1;">
+                    <input type="text" class="editor-title" id="docTitle" placeholder="Untitled Document" value="Untitled Document">
+                    <div id="autoSaveStatus" style="font-size: 0.85rem; color: #10b981; font-weight: 500; padding-left: 4px; display: none;">
+                        🔄 Auto-save active
+                    </div>
+                </div>
                 <div class="editor-actions">
                     <button class="btn btn-primary" onclick="shareDocument()" title="Share this document">
                         🔗 Share
@@ -1714,6 +1719,8 @@
                 
                 // Start auto-save if enabled
                 if (autoSaveEnabled) {
+                    const statusIndicator = document.getElementById('autoSaveStatus');
+                    if (statusIndicator) statusIndicator.style.display = 'block';
                     startAutoSave();
                 }
                 
@@ -1724,12 +1731,14 @@
             }
         }
 
-        async function saveDocument() {
-            console.log('Save button clicked! currentDocId:', currentDocId);
+        async function saveDocument(isAutoSave = false) {
+            console.log('Save button clicked! currentDocId:', currentDocId, 'isAutoSave:', isAutoSave);
             
             if (!currentDocId) {
                 console.error('No document ID - cannot save');
-                showNotification('⚠️ No document open to save!', 'error');
+                if (!isAutoSave) {
+                    showNotification('⚠️ No document open to save!', 'error');
+                }
                 return;
             }
             
@@ -1766,7 +1775,12 @@
                 console.log('Save response data:', data);
                 
                 if (data.success) {
-                    showNotification('✅ Document saved successfully!', 'success');
+                    if (isAutoSave) {
+                        console.log('✅ Auto-save completed successfully');
+                        showNotification('🔄 Auto-saved', 'success');
+                    } else {
+                        showNotification('✅ Document saved successfully!', 'success');
+                    }
                     const now = new Date();
                     document.getElementById('lastActivity').textContent = now.toLocaleTimeString();
                     loadDocuments();
@@ -1775,21 +1789,26 @@
                 }
             } catch (error) {
                 console.error('Error saving document:', error);
-                showNotification('❌ Error saving: ' + error.message, 'error');
+                if (!isAutoSave) {
+                    showNotification('❌ Error saving: ' + error.message, 'error');
+                }
             }
         }
 
         function toggleAutoSave() {
             const toggle = document.getElementById('autosaveToggle');
+            const statusIndicator = document.getElementById('autoSaveStatus');
             autoSaveEnabled = toggle.value === 'on';
             
             if (autoSaveEnabled) {
                 console.log('🔄 Auto-save ENABLED (every 30 seconds)');
                 showNotification('🔄 Auto-save enabled - Document will save every 30 seconds', 'success');
+                if (statusIndicator) statusIndicator.style.display = 'block';
                 startAutoSave();
             } else {
                 console.log('⏸️ Auto-save DISABLED');
                 showNotification('⏸️ Auto-save disabled - Use Save button to save manually', 'info');
+                if (statusIndicator) statusIndicator.style.display = 'none';
                 stopAutoSave();
             }
         }
@@ -1803,10 +1822,12 @@
                 autoSaveTimer = setInterval(() => {
                     if (autoSaveEnabled && currentDocId) {
                         console.log('🔄 Auto-saving document...');
-                        saveDocument();
+                        saveDocument(true); // Pass true to indicate this is auto-save
                     }
                 }, AUTO_SAVE_INTERVAL);
                 console.log('✅ Auto-save timer started (30 seconds)');
+            } else {
+                console.log('⚠️ Cannot start auto-save - autoSaveEnabled:', autoSaveEnabled, 'currentDocId:', currentDocId);
             }
         }
 
@@ -1823,6 +1844,8 @@
             
             // Stop auto-save when closing editor
             stopAutoSave();
+            const statusIndicator = document.getElementById('autoSaveStatus');
+            if (statusIndicator) statusIndicator.style.display = 'none';
             
             try {
                 if (currentDocId && socket) {
