@@ -1,10 +1,30 @@
 {
   "version": 2,
   "name": "collabdocs",
+  "buildCommand": "npm install --prefix backend",
+  "devCommand": "cd backend && node server-demo.js",
+  "installCommand": "npm install --prefix backend",
+  "framework": null,
+  "outputDirectory": ".",
   "builds": [
     {
       "src": "backend/server-demo.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "maxLambdaSize": "50mb"
+      }
+    },
+    {
+      "src": "demo.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.js",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -17,17 +37,19 @@
       "dest": "backend/server-demo.js"
     },
     {
-      "src": "/(.*)",
+      "src": "/",
+      "dest": "/demo.html"
+    },
+    {
+      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|json))",
       "dest": "/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/demo.html"
     }
   ],
   "env": {
     "NODE_ENV": "production"
-  },
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "backend/server-demo.js"
-    }
-  ]
+  }
 }
