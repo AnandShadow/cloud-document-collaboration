@@ -1,6 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const session = require('express-session');
+const passport = require('passport');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 const app = express();
@@ -22,10 +25,35 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// Session configuration
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret-key-change-in-production',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false, // Set to true in production with HTTPS
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+}));
+
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Mount Auth routes (COMMENTED OUT FOR DEMO MODE - No GitHub OAuth required)
+// const authRoutes = require('./routes/auth');
+// app.use('/auth', authRoutes);
+console.log('⚠️  Auth routes disabled for DEMO MODE');
 
 // Mount AI routes
 const aiRoutes = require('./routes/ai');
 app.use('/api/ai', aiRoutes);
+
+// Mount Advanced AI routes
+const aiAdvancedRoutes = require('./routes/ai-advanced');
+app.use(aiAdvancedRoutes);
 
 // In-memory storage for demo
 const documents = new Map();

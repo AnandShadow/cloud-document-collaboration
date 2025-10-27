@@ -1187,9 +1187,162 @@
                 margin-bottom: 20px;
             }
         }
+
+        /* Login Screen Styles */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #8b5cf6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 60px 50px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+        }
+
+        .login-card h1 {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .login-card p {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        .github-login-btn {
+            background: #24292e;
+            color: white;
+            padding: 16px 40px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 15px rgba(36, 41, 46, 0.3);
+        }
+
+        .github-login-btn:hover {
+            background: #1a1e22;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(36, 41, 46, 0.4);
+        }
+
+        .github-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .login-features {
+            margin-top: 40px;
+            text-align: left;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 15px 0;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            margin: 0 8px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .logout-btn {
+            margin-left: 12px;
+            padding: 8px 16px;
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background: #fecaca;
+            transform: translateY(-1px);
+        }
     </style>
 </head>
 <body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen" style="display: none;">
+        <div class="login-card">
+            <h1>📝 CollabDocs</h1>
+            <p>Collaborative document editing with AI assistance</p>
+            
+            <button class="github-login-btn" onclick="loginWithGitHub()">
+                <svg class="github-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+                Continue with GitHub
+            </button>
+
+            <div class="login-features">
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    Real-time collaboration
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    AI-powered proofreading
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    Auto-save & sync
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    Multi-format export
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="navbar">
         <h1>
             <div class="logo-icon">C</div>
@@ -1247,6 +1400,9 @@
                     </button>
                     <button class="btn btn-ai" onclick="requestAIProofread()">
                         🤖 AI Proofread
+                    </button>
+                    <button class="btn btn-ai" onclick="openAdvancedAI()" title="Advanced AI: Rewrite, Generate, Analyze">
+                        ✨ AI Assistant
                     </button>
                     <div class="save-controls">
                         <button class="btn btn-success" onclick="saveDocument()">
@@ -1394,6 +1550,105 @@
         </div>
     </div>
 
+    <!-- Advanced AI Assistant Modal -->
+    <div id="advancedAIModal" class="download-modal">
+        <div class="download-modal-content" style="max-width: 800px;">
+            <div class="download-modal-header">
+                <h3>✨ AI Assistant</h3>
+                <button class="share-close-btn" onclick="closeAdvancedAI()">×</button>
+            </div>
+            
+            <!-- Task Selection -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; color: #1e293b; margin-bottom: 10px;">
+                    Choose AI Task:
+                </label>
+                <select id="aiTaskSelect" onchange="updateAITaskUI()" style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem;">
+                    <option value="improve">✏️ Improve Writing - Fix grammar, clarity, flow</option>
+                    <option value="rewrite">🔄 Rewrite - Complete rewrite with same meaning</option>
+                    <option value="generate">🎨 Generate Document - Create from scratch</option>
+                    <option value="expand">📝 Expand - Add more details and examples</option>
+                    <option value="summarize">📊 Summarize - Create concise summary</option>
+                    <option value="suggest_alternatives">💡 Suggest Alternatives - Different ways to say it</option>
+                    <option value="tone_change">🎭 Change Tone - Adjust writing style</option>
+                    <option value="complete">⚡ Auto-Complete - Continue your text</option>
+                    <option value="analyze">🔍 Analyze Document - Get insights & suggestions</option>
+                </select>
+            </div>
+
+            <!-- Generate Prompt Input (only for 'generate' task) -->
+            <div id="generatePromptSection" style="display: none; margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; color: #1e293b; margin-bottom: 10px;">
+                    What do you want to create?
+                </label>
+                <textarea id="generatePrompt" 
+                          placeholder="Example: Write a business proposal for a cloud document collaboration tool..."
+                          style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; min-height: 100px; font-family: inherit;"></textarea>
+            </div>
+
+            <!-- Options -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                <div>
+                    <label style="display: block; font-weight: 600; color: #1e293b; margin-bottom: 8px;">
+                        Tone:
+                    </label>
+                    <select id="aiToneSelect" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 10px;">
+                        <option value="professional">Professional</option>
+                        <option value="casual">Casual</option>
+                        <option value="academic">Academic</option>
+                        <option value="creative">Creative</option>
+                        <option value="persuasive">Persuasive</option>
+                        <option value="friendly">Friendly</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-weight: 600; color: #1e293b; margin-bottom: 8px;">
+                        Length:
+                    </label>
+                    <select id="aiLengthSelect" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 10px;">
+                        <option value="short">Short & Concise</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="long">Long & Detailed</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Additional Context -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; color: #1e293b; margin-bottom: 10px;">
+                    Additional Instructions (Optional):
+                </label>
+                <textarea id="aiContext" 
+                          placeholder="Add any specific instructions or context..."
+                          style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; min-height: 80px; font-family: inherit;"></textarea>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                <button onclick="closeAdvancedAI()" 
+                        style="padding: 12px 24px; background: #f1f5f9; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                    Cancel
+                </button>
+                <button id="processAIBtn" onclick="processAdvancedAI()" 
+                        style="padding: 12px 32px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                    <span>✨ Process</span>
+                </button>
+            </div>
+
+            <!-- Results Section -->
+            <div id="aiResultsSection" style="display: none; margin-top: 25px; padding: 20px; background: #f8fafc; border-radius: 12px; border: 2px solid #e2e8f0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h4 style="margin: 0; color: #1e293b;">✨ AI Results</h4>
+                    <button onclick="applyAIResult()" 
+                            style="padding: 8px 20px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        📝 Apply to Document
+                    </button>
+                </div>
+                <div id="aiResultContent" style="max-height: 400px; overflow-y: auto; padding: 15px; background: white; border-radius: 8px; border: 1px solid #e2e8f0; white-space: pre-wrap; line-height: 1.6;"></div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script>
@@ -1451,9 +1706,117 @@
             }
         };
 
+        // ============================================
+        // AUTHENTICATION FUNCTIONS
+        // ============================================
+
+        // Check if user is authenticated
+        async function checkAuthStatus() {
+            console.log('🔐 Checking authentication status...');
+            try {
+                const response = await fetch(`${API_URL}/auth/user`, { 
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Auth check failed');
+                }
+                
+                const data = await response.json();
+                
+                if (data.authenticated && data.user) {
+                    console.log('✅ User authenticated:', data.user.username);
+                    updateNavbarWithUser(data.user);
+                    document.getElementById('loginScreen').style.display = 'none';
+                    return true;
+                } else {
+                    console.log('❌ User not authenticated');
+                    document.getElementById('loginScreen').style.display = 'flex';
+                    return false;
+                }
+            } catch (error) {
+                console.error('❌ Auth check error:', error);
+                document.getElementById('loginScreen').style.display = 'flex';
+                return false;
+            }
+        }
+
+        // Redirect to GitHub OAuth login
+        function loginWithGitHub() {
+            console.log('🚀 Redirecting to GitHub login...');
+            window.location.href = `${API_URL}/auth/github`;
+        }
+
+        // Update navbar with authenticated user info
+        function updateNavbarWithUser(user) {
+            console.log('👤 Updating navbar with user:', user.username);
+            const userInfo = document.querySelector('.user-info');
+            if (userInfo) {
+                userInfo.innerHTML = `
+                    <div class="status-dot"></div>
+                    <img src="${user.avatar || 'https://github.com/identicons/default.png'}" 
+                         alt="${user.username}" 
+                         class="user-avatar" 
+                         title="${user.displayName}">
+                    <span style="font-weight: 600; color: #1e293b;">${user.displayName || user.username}</span>
+                    <button onclick="logout()" class="logout-btn">Logout</button>
+                `;
+            }
+        }
+
+        // Logout user
+        async function logout() {
+            console.log('👋 Logging out...');
+            try {
+                const response = await fetch(`${API_URL}/auth/logout`, { 
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    console.log('✅ Logout successful');
+                    window.location.reload();
+                } else {
+                    throw new Error('Logout failed');
+                }
+            } catch (error) {
+                console.error('❌ Logout error:', error);
+                showNotification('Logout failed. Please try again.', 'error');
+            }
+        }
+
+        // Handle OAuth callback redirect
+        function handleAuthRedirect() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('authenticated') === 'true') {
+                console.log('✅ OAuth callback successful - cleaning URL');
+                // Remove the authenticated parameter from URL
+                window.history.replaceState({}, document.title, '/');
+            }
+        }
+
+        // ============================================
+        // APP INITIALIZATION
+        // ============================================
+
         // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             console.log('✅ DOM Content Loaded');
+            
+            // DEMO MODE: Skip authentication for demo purposes
+            console.log('🎯 Running in DEMO MODE - Authentication disabled');
+            
+            // Hide login screen for demo
+            document.getElementById('loginScreen').style.display = 'none';
+            
+            // Initialize the app directly without authentication
+            console.log('🚀 Initializing app...');
             try {
                 initializeEditor();
                 connectSocket();
@@ -2314,6 +2677,286 @@
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        // ============================================
+        // ADVANCED AI ASSISTANT FUNCTIONS
+        // ============================================
+
+        let currentAIResult = null;
+
+        function openAdvancedAI() {
+            console.log('✨ Opening Advanced AI Assistant');
+            
+            if (!currentDocId) {
+                showNotification('⚠️ Please open a document first', 'error');
+                return;
+            }
+
+            // Reset modal
+            document.getElementById('aiTaskSelect').value = 'improve';
+            document.getElementById('generatePromptSection').style.display = 'none';
+            document.getElementById('aiResultsSection').style.display = 'none';
+            document.getElementById('aiContext').value = '';
+            
+            // Show modal
+            document.getElementById('advancedAIModal').classList.add('show');
+        }
+
+        function closeAdvancedAI() {
+            document.getElementById('advancedAIModal').classList.remove('show');
+            currentAIResult = null;
+        }
+
+        function updateAITaskUI() {
+            const task = document.getElementById('aiTaskSelect').value;
+            const generateSection = document.getElementById('generatePromptSection');
+            
+            // Show prompt input only for 'generate' task
+            if (task === 'generate') {
+                generateSection.style.display = 'block';
+            } else {
+                generateSection.style.display = 'none';
+            }
+        }
+
+        async function processAdvancedAI() {
+            const task = document.getElementById('aiTaskSelect').value;
+            const tone = document.getElementById('aiToneSelect').value;
+            const length = document.getElementById('aiLengthSelect').value;
+            const context = document.getElementById('aiContext').value;
+            const generatePrompt = document.getElementById('generatePrompt').value;
+
+            console.log('🤖 Processing Advanced AI:', { task, tone, length });
+
+            // Validate inputs
+            if (task === 'generate' && !generatePrompt.trim()) {
+                showNotification('⚠️ Please enter what you want to generate', 'error');
+                return;
+            }
+
+            if (task !== 'generate' && task !== 'analyze') {
+                const text = quill.getText().trim();
+                if (!text || text.length < 10) {
+                    showNotification('⚠️ Please add some content to the document first', 'error');
+                    return;
+                }
+            }
+
+            // Show loading state
+            const btn = document.getElementById('processAIBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span>🔄 Processing...</span>';
+
+            try {
+                let response;
+
+                if (task === 'analyze') {
+                    // Use analyze endpoint
+                    response = await fetch(`${API_URL}/api/ai/analyze`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            text: quill.getText(),
+                            docTitle: document.getElementById('docTitle')?.value || 'Untitled'
+                        })
+                    });
+                } else {
+                    // Use advanced endpoint
+                    response = await fetch(`${API_URL}/api/ai/advanced`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            text: quill.getText(),
+                            task: task,
+                            prompt: generatePrompt,
+                            toneTarget: tone,
+                            length: length,
+                            context: context
+                        })
+                    });
+                }
+
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error || 'AI processing failed');
+                }
+
+                console.log('✅ AI response received:', data);
+
+                // Display results
+                displayAIResult(task, data);
+                
+                showNotification('✅ AI processing complete!', 'success');
+
+            } catch (error) {
+                console.error('❌ Advanced AI error:', error);
+                showNotification('❌ AI processing failed: ' + error.message, 'error');
+            } finally {
+                // Reset button
+                btn.disabled = false;
+                btn.innerHTML = '<span>✨ Process</span>';
+            }
+        }
+
+        function displayAIResult(task, data) {
+            const resultSection = document.getElementById('aiResultsSection');
+            const resultContent = document.getElementById('aiResultContent');
+            
+            let html = '';
+
+            if (task === 'analyze') {
+                // Display analysis results
+                const analysis = data.analysis;
+                
+                if (typeof analysis === 'object') {
+                    html = `
+                        <div style="space-y: 15px;">
+                            ${analysis.readability_score ? `
+                                <div style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                                    <h4 style="margin: 0 0 8px 0;">📊 Readability Score</h4>
+                                    <p style="font-size: 2rem; font-weight: bold; margin: 0;">${analysis.readability_score}/100</p>
+                                </div>
+                            ` : ''}
+                            
+                            ${analysis.summary ? `
+                                <div style="margin-bottom: 15px;">
+                                    <h4 style="color: #1e293b; margin-bottom: 8px;">📝 Summary</h4>
+                                    <p style="color: #475569; line-height: 1.6;">${analysis.summary}</p>
+                                </div>
+                            ` : ''}
+                            
+                            ${analysis.tone ? `
+                                <div style="margin-bottom: 15px;">
+                                    <h4 style="color: #1e293b; margin-bottom: 8px;">🎭 Detected Tone</h4>
+                                    <span style="background: #dbeafe; color: #1e40af; padding: 6px 12px; border-radius: 20px; font-weight: 600;">${analysis.tone}</span>
+                                </div>
+                            ` : ''}
+                            
+                            ${analysis.word_count ? `
+                                <div style="margin-bottom: 15px;">
+                                    <h4 style="color: #1e293b; margin-bottom: 8px;">📊 Statistics</h4>
+                                    <p style="color: #475569;">Words: ${analysis.word_count} | Reading Time: ${analysis.estimated_reading_time || 'N/A'}</p>
+                                </div>
+                            ` : ''}
+                            
+                            ${analysis.keywords && analysis.keywords.length > 0 ? `
+                                <div style="margin-bottom: 15px;">
+                                    <h4 style="color: #1e293b; margin-bottom: 8px;">🔑 Keywords</h4>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                        ${analysis.keywords.map(k => `<span style="background: #f1f5f9; padding: 4px 10px; border-radius: 15px; font-size: 0.9rem;">${k}</span>`).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            ${analysis.strengths && analysis.strengths.length > 0 ? `
+                                <div style="margin-bottom: 15px;">
+                                    <h4 style="color: #1e293b; margin-bottom: 8px;">✅ Strengths</h4>
+                                    <ul style="color: #10b981; line-height: 1.8;">
+                                        ${analysis.strengths.map(s => `<li>${s}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                            
+                            ${analysis.improvements && analysis.improvements.length > 0 ? `
+                                <div style="margin-bottom: 15px;">
+                                    <h4 style="color: #1e293b; margin-bottom: 8px;">💡 Improvements</h4>
+                                    ${analysis.improvements.map(imp => `
+                                        <div style="background: #fef3c7; padding: 12px; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #f59e0b;">
+                                            <p style="font-weight: 600; color: #92400e; margin: 0 0 5px 0;">${imp.type}: ${imp.issue}</p>
+                                            <p style="color: #78350f; margin: 0; font-size: 0.9rem;">${imp.suggestion}</p>
+                                            <span style="background: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; color: #b45309; margin-top: 5px; display: inline-block;">Priority: ${imp.priority}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                            
+                            ${analysis.suggestions ? `
+                                <div style="background: #dcfce7; padding: 15px; border-radius: 10px; border-left: 4px solid #10b981;">
+                                    <h4 style="color: #1e293b; margin: 0 0 10px 0;">💡 AI Suggestions</h4>
+                                    ${analysis.suggestions.title ? `<p style="margin: 5px 0;"><strong>Title:</strong> ${analysis.suggestions.title}</p>` : ''}
+                                    ${analysis.suggestions.opening ? `<p style="margin: 5px 0;"><strong>Opening:</strong> ${analysis.suggestions.opening}</p>` : ''}
+                                    ${analysis.suggestions.closing ? `<p style="margin: 5px 0;"><strong>Closing:</strong> ${analysis.suggestions.closing}</p>` : ''}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                } else {
+                    html = `<pre style="white-space: pre-wrap; line-height: 1.6; color: #1e293b;">${analysis}</pre>`;
+                }
+                
+                // No apply button for analysis
+                document.querySelector('#aiResultsSection button').style.display = 'none';
+                
+            } else if (task === 'suggest_alternatives') {
+                // Display alternatives
+                const result = data.result;
+                if (Array.isArray(result)) {
+                    html = result.map((alt, idx) => `
+                        <div style="background: #f8fafc; padding: 15px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid #3b82f6;">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                <h4 style="margin: 0; color: #1e293b;">${alt.version || `Alternative ${idx + 1}`}</h4>
+                                <span style="background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem;">${alt.style || 'N/A'}</span>
+                            </div>
+                            <p style="color: #475569; line-height: 1.6; margin: 10px 0;">${alt.text}</p>
+                            ${alt.explanation ? `<p style="color: #64748b; font-size: 0.85rem; font-style: italic; margin: 8px 0 0 0;">💡 ${alt.explanation}</p>` : ''}
+                        </div>
+                    `).join('');
+                } else {
+                    html = `<pre style="white-space: pre-wrap; line-height: 1.6; color: #1e293b;">${JSON.stringify(result, null, 2)}</pre>`;
+                }
+                
+                // Show apply button
+                document.querySelector('#aiResultsSection button').style.display = 'block';
+                
+            } else {
+                // Display text result
+                html = `<pre style="white-space: pre-wrap; line-height: 1.6; color: #1e293b; font-family: inherit;">${data.result}</pre>`;
+                
+                // Show apply button
+                document.querySelector('#aiResultsSection button').style.display = 'block';
+            }
+
+            resultContent.innerHTML = html;
+            resultSection.style.display = 'block';
+            
+            // Store result for applying
+            currentAIResult = data.result;
+        }
+
+        function applyAIResult() {
+            if (!currentAIResult) {
+                showNotification('⚠️ No result to apply', 'error');
+                return;
+            }
+
+            console.log('📝 Applying AI result to document');
+
+            try {
+                // Convert result to plain text if it's an object
+                let textToApply = '';
+                
+                if (typeof currentAIResult === 'string') {
+                    textToApply = currentAIResult;
+                } else if (Array.isArray(currentAIResult)) {
+                    // For alternatives, apply the first one
+                    textToApply = currentAIResult[0]?.text || JSON.stringify(currentAIResult[0], null, 2);
+                } else {
+                    textToApply = JSON.stringify(currentAIResult, null, 2);
+                }
+
+                // Clear editor and set new content
+                quill.setText('');
+                quill.clipboard.dangerouslyPasteHTML(0, textToApply.replace(/\n/g, '<br>'));
+
+                showNotification('✅ AI result applied to document!', 'success');
+                closeAdvancedAI();
+
+            } catch (error) {
+                console.error('❌ Error applying result:', error);
+                showNotification('❌ Failed to apply result', 'error');
+            }
         }
 
         // ===== REAL-TIME COLLABORATION & SHARING FUNCTIONS =====

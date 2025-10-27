@@ -1,64 +1,76 @@
 const express = require('express');
 const router = express.Router();
-const { auth, db } = require('../config/firebase');
+const passport = require('passport');
+const GitHubStrategy = require('passport-github2').Strategy;
 
-// Register endpoint (handled by Firebase on client, this is for additional user data)
-router.post('/register', async (req, res) => {
-  try {
-    const { uid, email, displayName, role } = req.body;
-    
-    await db.collection('users').doc(uid).set({
-      email,
-      displayName,
-      role: role || 'editor', // Default role
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    });
+// Configure GitHub Strategy
+passport.use(new GitHubStrategy({
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: process.env.GITHUB_CALLBACK_URL || "http://localhost:5000/auth/github/callback"
+}, async (accessToken, refreshToken, profile, done) => {
+    try {
+        console.log('GitHub authentication successful:', profile.username);
+        
+        const user = {
+            id: profile.id,
+            username: profile.username,
+            displayName: profile.displayName || profile.username,
+            email: profile.emails && profile.emails[0] ? profile.emails[0].value : null,
+            avatar: profile.photos && profile.photos[0] ? profile.photos[0].value : null,
+            profileUrl: profile.profileUrl,
+            githubToken: accessToken
+        };
+        
+        return done(null, user);
+    } catch (error) {
+        console.error('GitHub auth error:', error);
+        return done(error, null);
+    }
+}));
 
-    res.status(201).json({ message: 'User profile created' });
-  } catch (error) {
-    console.error('Error creating user profile:', error);
-    res.status(500).json({ error: 'Failed to create user profile' });
-  }
+passport.serializeUser((user, done) => {
+    done(null, user);
 });
 
-// Get user profile
-router.get('/profile/:uid', async (req, res) => {
-  try {
-    const { uid } = req.params;
-    const userDoc = await db.collection('users').doc(uid).get();
-    
-    if (!userDoc.exists) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    res.json(userDoc.data());
-  } catch (error) {
-    console.error('Error fetching user profile:', error);
-    res.status(500).json({ error: 'Failed to fetch user profile' });
-  }
+passport.deserializeUser((user, done) => {
+    done(null, user);
 });
 
-// Update user role (admin only)
-router.put('/role/:uid', async (req, res) => {
-  try {
-    const { uid } = req.params;
-    const { role } = req.body;
+router.get('/github', passport.authenticate('github', { 
+    scope: ['user:email'] 
+}));
 
-    if (!['admin', 'editor', 'viewer'].includes(role)) {
-      return res.status(400).json({ error: 'Invalid role' });
+router.get('/github/callback', 
+    passport.authenticate('github', { failureRedirect: '/' }),
+    (req, res) => {
+        console.log('User authenticated:', req.user.username);
+        res.redirect('/?authenticated=true');
     }
+);
 
-    await db.collection('users').doc(uid).update({
-      role,
-      updatedAt: new Date().toISOString()
+router.get('/user', (req, res) => {
+    if (req.isAuthenticated()) {
+        res.json({
+            authenticated: true,
+            user: req.user
+        });
+    } else {
+        res.json({
+            authenticated: false,
+            user: null
+        });
+    }
+});
+
+router.post('/logout', (req, res) => {
+    req.logout((err) => {
+        if (err) {
+            return res.status(500).json({ error: 'Logout failed' });
+        }
+        req.session.destroy();
+        res.json({ message: 'Logged out successfully' });
     });
-
-    res.json({ message: 'User role updated' });
-  } catch (error) {
-    console.error('Error updating user role:', error);
-    res.status(500).json({ error: 'Failed to update user role' });
-  }
 });
 
 module.exports = router;
