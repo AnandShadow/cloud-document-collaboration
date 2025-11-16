@@ -9,109 +9,82 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #8b5cf6 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: #f8fafc;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
+            color: #1e293b;
         }
 
-        /* Animated background effect */
+        /* Remove animated background - too playful */
         body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, rgba(30, 58, 138, 0.2) 0%, transparent 50%);
-            animation: float 15s ease-in-out infinite;
-            z-index: 0;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+            display: none;
         }
 
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 20px 40px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            background: white;
+            padding: 12px 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: relative;
             z-index: 10;
-            border-bottom: 3px solid #3b82f6;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         .navbar h1 {
-            background: linear-gradient(135deg, #1e3a8a, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: 2rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
+            color: #0f172a;
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: -0.025em;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
         }
 
         .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            border-radius: 10px;
+            width: 28px;
+            height: 28px;
+            background: #2563eb;
+            border-radius: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+            font-weight: 600;
+            font-size: 0.875rem;
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 20px;
-            background: linear-gradient(135deg, #eff6ff, #f5f3ff);
-            padding: 10px 20px;
-            border-radius: 50px;
-            border: 2px solid #e0e7ff;
+            gap: 12px;
+            background: #f8fafc;
+            padding: 6px 14px;
+            border-radius: 0;
+            border: 1px solid #e2e8f0;
         }
 
         .user-avatar {
-            width: 35px;
-            height: 35px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: #2563eb;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: bold;
-            font-size: 0.9rem;
+            font-weight: 500;
+            font-size: 0.75rem;
         }
 
         .status-dot {
-            width: 12px;
-            height: 12px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: #10b981;
-            animation: pulse 2s infinite;
-            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.1); }
         }
 
         .container {
@@ -123,26 +96,12 @@
         }
 
         .dashboard {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 
-                0 20px 60px rgba(0,0,0,0.15),
-                0 0 0 1px rgba(255,255,255,0.5) inset;
-            margin-bottom: 30px;
-            animation: slideUp 0.6s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            background: white;
+            border-radius: 0;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+            border: 1px solid #e2e8f0;
         }
 
         .dashboard-header {
@@ -165,9 +124,9 @@
             gap: 30px;
             margin-bottom: 30px;
             padding: 20px;
-            background: linear-gradient(135deg, #eff6ff, #f5f3ff);
-            border-radius: 15px;
-            border: 1px solid #e0e7ff;
+            background: #f8fafc;
+            border-radius: 0;
+            border: 1px solid #e2e8f0;
         }
 
         .stat-item {
@@ -185,7 +144,7 @@
         .stat-value {
             font-size: 1.5rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: #2563eb;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -195,12 +154,12 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 25px;
-            margin-top: 20px;
+            margin-top: 16px;
         }
 
         .doc-card {
-            background: linear-gradient(135deg, #ffffff, #f8fafc);
-            border-radius: 16px;
+            background: white;
+            border-radius: 0;
             padding: 25px;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -216,7 +175,7 @@
             left: 0;
             width: 100%;
             height: 4px;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            background: #2563eb;
             transform: scaleX(0);
             transition: transform 0.3s ease;
         }
@@ -240,7 +199,7 @@
 
         .doc-card p {
             color: #64748b;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             line-height: 1.6;
         }
 
@@ -256,8 +215,8 @@
         .doc-icon {
             width: 50px;
             height: 50px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 0;
+            background: #2563eb;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -268,15 +227,12 @@
         }
 
         .editor-container {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 
-                0 20px 60px rgba(0,0,0,0.15),
-                0 0 0 1px rgba(255,255,255,0.5) inset;
+            background: white;
+            border-radius: 0;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             display: none;
-            animation: slideUp 0.6s ease-out;
+            border: 1px solid #e2e8f0;
         }
 
         .editor-container.active {
@@ -287,95 +243,116 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 25px;
-            border-bottom: 2px solid #e5e7eb;
-            background: linear-gradient(135deg, #eff6ff, #f5f3ff);
-            padding: 20px 25px;
-            border-radius: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         .editor-title {
-            font-size: 1.6rem;
-            color: #1e293b;
+            font-size: 1.25rem;
+            color: #0f172a;
             border: none;
             outline: none;
             width: 60%;
             background: transparent;
-            font-weight: 700;
-            padding: 8px 12px;
-            border-bottom: 2px solid transparent;
-            transition: border-color 0.3s ease;
+            font-weight: 600;
+            padding: 4px 0;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s ease;
         }
 
         .editor-title:focus {
-            border-bottom-color: #3b82f6;
+            border-bottom-color: #2563eb;
         }
 
         .editor-actions {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             align-items: center;
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 8px;
             border: none;
-            border-radius: 12px;
-            font-weight: 600;
+            border-radius: 0;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            font-size: 0.95rem;
-            display: flex;
+            transition: all 0.15s ease;
+            font-size: 1rem;
+            display: inline-flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            justify-content: center;
+            gap: 0;
+            box-shadow: none;
+            letter-spacing: 0;
+            line-height: 1;
+            min-width: 32px;
+            min-height: 32px;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: none;
+            box-shadow: none;
+            filter: brightness(0.95);
         }
 
         .btn:active {
-            transform: translateY(0);
+            transform: scale(0.98);
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            background: #2563eb;
             color: white;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            background: #1d4ed8;
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-            color: #1e293b;
+            background: white;
+            color: #475569;
+            border: 1px solid #cbd5e1;
         }
 
         .btn-secondary:hover {
-            background: linear-gradient(135deg, #e2e8f0, #cbd5e0);
+            background: #f8fafc;
         }
 
         .btn-success {
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: #059669;
             color: white;
         }
 
         .btn-success:hover {
-            background: linear-gradient(135deg, #059669, #047857);
+            background: #047857;
+        }
+
+        .btn-purple {
+            background: #475569;
+            color: white;
+        }
+
+        .btn-purple:hover {
+            background: #334155;
+        }
+
+        .btn-ai {
+            background: #475569;
+            color: white;
+        }
+
+        .btn-ai:hover {
+            background: #334155;
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
+            background: #dc2626;
             color: white;
         }
 
         .btn-danger:hover {
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            background: #b91c1c;
         }
 
         .save-controls {
@@ -385,22 +362,22 @@
         }
 
         .autosave-toggle {
-            padding: 12px 16px;
-            border: 2px solid #10b981;
-            border-radius: 12px;
+            padding: 8px 14px;
+            border: 1.5px solid #10b981;
+            border-radius: 0;
             background: white;
             color: #059669;
-            font-weight: 600;
-            font-size: 0.9rem;
+            font-weight: 500;
+            font-size: 0.875rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1);
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(16, 185, 129, 0.08);
         }
 
         .autosave-toggle:hover {
             background: #f0fdf4;
             border-color: #059669;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.12);
         }
 
         .autosave-toggle:focus {
@@ -417,7 +394,7 @@
             height: 450px;
             background: white;
             border: 2px solid #e5e7eb;
-            border-radius: 15px;
+            border-radius: 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
@@ -428,7 +405,7 @@
 
         .ql-toolbar {
             border-radius: 15px 15px 0 0 !important;
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9) !important;
+            background: #f8fafc !important;
             border: 2px solid #e5e7eb !important;
             border-bottom: none !important;
         }
@@ -445,24 +422,24 @@
             gap: 12px;
             margin-top: 25px;
             padding: 20px;
-            background: linear-gradient(135deg, #eff6ff, #f5f3ff);
-            border-radius: 15px;
-            border: 1px solid #e0e7ff;
+            background: #f8fafc;
+            border-radius: 0;
+            border: 1px solid #e2e8f0;
             align-items: center;
         }
 
         .active-users-label {
             font-weight: 600;
             color: #64748b;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
         }
 
         .user-badge {
             padding: 10px 18px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: #2563eb;
             color: white;
-            border-radius: 25px;
-            font-size: 0.9rem;
+            border-radius: 0;
+            font-size: 0.875rem;
             font-weight: 600;
             box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
             display: flex;
@@ -471,7 +448,7 @@
         }
 
         .create-doc {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: #2563eb;
             color: white;
             display: flex;
             flex-direction: column;
@@ -493,7 +470,7 @@
         }
 
         .create-doc:hover {
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            background: #2563eb;
             transform: translateY(-8px) scale(1.02) !important;
         }
 
@@ -505,9 +482,9 @@
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            background: white;
             padding: 25px;
-            border-radius: 16px;
+            border-radius: 0;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             border: 2px solid #e5e7eb;
             transition: all 0.3s ease;
@@ -520,7 +497,7 @@
 
         .stat-card h3 {
             color: #64748b;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             margin-bottom: 12px;
             font-weight: 600;
             text-transform: uppercase;
@@ -528,7 +505,7 @@
         }
 
         .stat-card .value {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: #2563eb;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -542,7 +519,7 @@
             right: 30px;
             background: white;
             padding: 18px 30px;
-            border-radius: 15px;
+            border-radius: 0;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             display: none;
             animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -570,11 +547,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 20px;
+            margin-top: 16px;
             padding-top: 20px;
             border-top: 2px solid #e5e7eb;
             color: #64748b;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
         }
 
         .last-saved {
@@ -598,7 +575,7 @@
             max-height: 70vh;
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(20px);
-            border-radius: 20px;
+            border-radius: 0;
             box-shadow: 0 20px 60px rgba(0,0,0,0.2);
             display: none;
             flex-direction: column;
@@ -625,7 +602,7 @@
         .ai-panel-header {
             padding: 20px 25px;
             border-bottom: 2px solid #e5e7eb;
-            background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+            background: #f8fafc;
             border-radius: 20px 20px 0 0;
             display: flex;
             justify-content: space-between;
@@ -653,7 +630,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 8px;
+            border-radius: 0;
             transition: all 0.3s ease;
         }
 
@@ -669,9 +646,9 @@
         }
 
         .ai-suggestion-item {
-            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            background: white;
             border: 2px solid #e5e7eb;
-            border-radius: 12px;
+            border-radius: 0;
             padding: 15px;
             margin-bottom: 15px;
             transition: all 0.3s ease;
@@ -679,28 +656,28 @@
 
         .ai-suggestion-item:hover {
             border-color: #3b82f6;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 1px 3px rgba(59, 130, 246, 0.2);
         }
 
         .ai-suggestion-original {
             background: #fef2f2;
             padding: 8px 12px;
-            border-radius: 8px;
+            border-radius: 0;
             border-left: 3px solid #ef4444;
             margin-bottom: 10px;
             font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             color: #991b1b;
         }
 
         .ai-suggestion-new {
             background: #f0fdf4;
             padding: 8px 12px;
-            border-radius: 8px;
+            border-radius: 0;
             border-left: 3px solid #10b981;
             margin-bottom: 10px;
             font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             color: #065f46;
         }
 
@@ -719,18 +696,18 @@
         .ai-apply-btn {
             flex: 1;
             padding: 8px 16px;
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: #059669;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 0;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
         }
 
         .ai-apply-btn:hover {
-            background: linear-gradient(135deg, #059669, #047857);
+            background: #059669;
             transform: translateY(-1px);
         }
 
@@ -739,11 +716,11 @@
             background: #f1f5f9;
             color: #64748b;
             border: none;
-            border-radius: 8px;
+            border-radius: 0;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
         }
 
         .ai-dismiss-btn:hover {
@@ -778,12 +755,12 @@
         }
 
         .btn-ai {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            background: #475569;
             color: white;
         }
 
         .btn-ai:hover {
-            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            background: #334155;
         }
 
         /* Share Modal Styles */
@@ -807,7 +784,7 @@
 
         .share-modal-content {
             background: white;
-            border-radius: 20px;
+            border-radius: 0;
             padding: 30px;
             max-width: 500px;
             width: 90%;
@@ -836,7 +813,7 @@
         .share-modal-header h3 {
             margin: 0;
             font-size: 1.5rem;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: #2563eb;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -863,9 +840,9 @@
         }
 
         .share-link-container {
-            background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+            background: #f8fafc;
             border: 2px solid #dbeafe;
-            border-radius: 12px;
+            border-radius: 0;
             padding: 15px;
             margin: 15px 0;
             display: flex;
@@ -878,44 +855,44 @@
             border: none;
             background: white;
             padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 0.9rem;
+            border-radius: 0;
+            font-size: 0.875rem;
             color: #1e293b;
         }
 
         .copy-link-btn {
-            padding: 10px 20px;
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            padding: 8px 16px;
+            background: #2563eb;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 0;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
         }
 
         .copy-link-btn:hover {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            background: #2563eb;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3);
         }
 
         .copy-link-btn.copied {
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: #059669;
         }
 
         .share-options {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 16px;
         }
 
         .share-option-btn {
             padding: 15px;
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            background: #f8fafc;
             border: 2px solid #e2e8f0;
-            border-radius: 12px;
+            border-radius: 0;
             cursor: pointer;
             transition: all 0.3s;
             text-align: center;
@@ -925,10 +902,10 @@
         }
 
         .share-option-btn:hover {
-            background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+            background: #f1f5f9;
             border-color: #3b82f6;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 1px 3px rgba(59, 130, 246, 0.2);
         }
 
         .share-option-icon {
@@ -955,10 +932,10 @@
             position: absolute;
             top: -20px;
             left: 2px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: #2563eb;
             color: white;
             padding: 2px 8px;
-            border-radius: 4px;
+            border-radius: 0;
             font-size: 0.75rem;
             white-space: nowrap;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -976,9 +953,9 @@
             align-items: center;
             gap: 5px;
             padding: 5px 12px;
-            background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+            background: #f1f5f9;
             border: 2px solid #93c5fd;
-            border-radius: 20px;
+            border-radius: 0;
             font-size: 0.85rem;
             font-weight: 600;
             color: #1e40af;
@@ -1000,7 +977,7 @@
             width: 24px;
             height: 24px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: #2563eb;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1010,7 +987,7 @@
         }
 
         .change-highlight {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            background: #fef3c7;
             animation: highlightFade 2s ease;
         }
 
@@ -1022,8 +999,8 @@
         .typing-indicator {
             display: inline-block;
             padding: 4px 10px;
-            background: linear-gradient(135deg, #dbeafe, #e0e7ff);
-            border-radius: 12px;
+            background: #f1f5f9;
+            border-radius: 0;
             font-size: 0.75rem;
             color: #1e40af;
             margin-left: 10px;
@@ -1056,7 +1033,7 @@
 
         .download-modal-content {
             background: white;
-            border-radius: 20px;
+            border-radius: 0;
             padding: 30px;
             max-width: 500px;
             width: 90%;
@@ -1074,7 +1051,7 @@
         .download-modal-header h3 {
             margin: 0;
             font-size: 1.5rem;
-            background: linear-gradient(135deg, #10b981, #3b82f6);
+            background: #2563eb;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -1087,9 +1064,9 @@
         }
 
         .download-format-btn {
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            background: #f8fafc;
             border: 2px solid #e2e8f0;
-            border-radius: 12px;
+            border-radius: 0;
             padding: 20px;
             cursor: pointer;
             transition: all 0.3s;
@@ -1103,7 +1080,7 @@
         }
 
         .download-format-btn:hover {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: #2563eb;
             color: white;
             border-color: #3b82f6;
             transform: translateY(-2px);
@@ -1122,15 +1099,15 @@
         }
 
         .download-info-box {
-            background: linear-gradient(135deg, #dbeafe, #e0e7ff);
-            border-radius: 12px;
+            background: #f1f5f9;
+            border-radius: 0;
             padding: 15px;
             margin-top: 15px;
         }
 
         .download-info-box h4 {
             margin: 0 0 10px 0;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             color: #1e40af;
         }
 
@@ -1195,7 +1172,7 @@
             left: 0;
             width: 100%;
             height: 100vh;
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #8b5cf6 100%);
+            background: #2563eb;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1206,7 +1183,7 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             padding: 60px 50px;
-            border-radius: 30px;
+            border-radius: 0;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             text-align: center;
             max-width: 450px;
@@ -1214,7 +1191,7 @@
         }
 
         .login-card h1 {
-            background: linear-gradient(135deg, #1e3a8a, #3b82f6, #8b5cf6);
+            background: #2563eb;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -1233,7 +1210,7 @@
             background: #24292e;
             color: white;
             padding: 16px 40px;
-            border-radius: 50px;
+            border-radius: 0;
             border: none;
             font-size: 1.1rem;
             font-weight: 600;
@@ -1273,7 +1250,7 @@
         .feature-icon {
             width: 24px;
             height: 24px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: #2563eb;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1296,7 +1273,7 @@
             background: #fee2e2;
             color: #dc2626;
             border: none;
-            border-radius: 8px;
+            border-radius: 0;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.2s ease;
@@ -1393,28 +1370,28 @@
                 </div>
                 <div class="editor-actions">
                     <button class="btn btn-primary" onclick="shareDocument()" title="Share this document">
-                        🔗 Share
+                        🔗
                     </button>
                     <button class="btn btn-success" onclick="downloadDocument()" title="Download document">
-                        📥 Download
+                        📥
                     </button>
-                    <button class="btn btn-ai" onclick="requestAIProofread()">
-                        🤖 AI Proofread
+                    <button class="btn btn-ai" onclick="requestAIProofread()" title="AI Proofread">
+                        🤖
                     </button>
                     <button class="btn btn-ai" onclick="openAdvancedAI()" title="Advanced AI: Rewrite, Generate, Analyze">
-                        ✨ AI Assistant
+                        ✨
                     </button>
                     <div class="save-controls">
-                        <button class="btn btn-success" onclick="saveDocument()">
-                            💾 Save
+                        <button class="btn btn-success" onclick="saveDocument()" title="Save document">
+                            💾
                         </button>
                         <select class="autosave-toggle" id="autosaveToggle" onchange="toggleAutoSave()" title="Auto-save settings">
                             <option value="on">🔄 Auto (10s)</option>
                             <option value="off">⏸️ Manual</option>
                         </select>
                     </div>
-                    <button class="btn btn-secondary" onclick="closeEditor()">
-                        ← Back
+                    <button class="btn btn-secondary" onclick="closeEditor()" title="Back to documents">
+                        ←
                     </button>
                 </div>
             </div>
@@ -1459,8 +1436,8 @@
                 </button>
             </div>
 
-            <div style="margin: 20px 0; padding: 15px; background: linear-gradient(135deg, #dbeafe, #e0e7ff); border-radius: 12px; border-left: 4px solid #3b82f6;">
-                <p style="margin: 0; font-size: 0.9rem; color: #1e40af;">
+            <div style="margin: 20px 0; padding: 15px; background: #f1f5f9; border-radius: 0; border-left: 4px solid #3b82f6;">
+                <p style="margin: 0; font-size: 0.875rem; color: #1e40af;">
                     <strong>💡 Real-time Collaboration:</strong><br>
                     Share this link to collaborate in real-time! Others will see:
                 </p>
@@ -1563,7 +1540,7 @@
                 <label style="display: block; font-weight: 600; color: #1e293b; margin-bottom: 10px;">
                     Choose AI Task:
                 </label>
-                <select id="aiTaskSelect" onchange="updateAITaskUI()" style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem;">
+                <select id="aiTaskSelect" onchange="updateAITaskUI()" style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 0; font-size: 1rem;">
                     <option value="improve">✏️ Improve Writing - Fix grammar, clarity, flow</option>
                     <option value="rewrite">🔄 Rewrite - Complete rewrite with same meaning</option>
                     <option value="generate">🎨 Generate Document - Create from scratch</option>
@@ -1583,7 +1560,7 @@
                 </label>
                 <textarea id="generatePrompt" 
                           placeholder="Example: Write a business proposal for a cloud document collaboration tool..."
-                          style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; min-height: 100px; font-family: inherit;"></textarea>
+                          style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 0; font-size: 1rem; min-height: 100px; font-family: inherit;"></textarea>
             </div>
 
             <!-- Options -->
@@ -1592,7 +1569,7 @@
                     <label style="display: block; font-weight: 600; color: #1e293b; margin-bottom: 8px;">
                         Tone:
                     </label>
-                    <select id="aiToneSelect" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 10px;">
+                    <select id="aiToneSelect" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 0;">
                         <option value="professional">Professional</option>
                         <option value="casual">Casual</option>
                         <option value="academic">Academic</option>
@@ -1605,7 +1582,7 @@
                     <label style="display: block; font-weight: 600; color: #1e293b; margin-bottom: 8px;">
                         Length:
                     </label>
-                    <select id="aiLengthSelect" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 10px;">
+                    <select id="aiLengthSelect" style="width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 0;">
                         <option value="short">Short & Concise</option>
                         <option value="medium" selected>Medium</option>
                         <option value="long">Long & Detailed</option>
@@ -1620,31 +1597,31 @@
                 </label>
                 <textarea id="aiContext" 
                           placeholder="Add any specific instructions or context..."
-                          style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; min-height: 80px; font-family: inherit;"></textarea>
+                          style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 0; font-size: 0.95rem; min-height: 80px; font-family: inherit;"></textarea>
             </div>
 
             <!-- Action Buttons -->
             <div style="display: flex; gap: 12px; justify-content: flex-end;">
                 <button onclick="closeAdvancedAI()" 
-                        style="padding: 12px 24px; background: #f1f5f9; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                        style="padding: 12px 24px; background: #f1f5f9; border: none; border-radius: 0; font-weight: 600; cursor: pointer;">
                     Cancel
                 </button>
                 <button id="processAIBtn" onclick="processAdvancedAI()" 
-                        style="padding: 12px 32px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                        style="padding: 12px 32px; background: #2563eb; color: white; border: none; border-radius: 0; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
                     <span>✨ Process</span>
                 </button>
             </div>
 
             <!-- Results Section -->
-            <div id="aiResultsSection" style="display: none; margin-top: 25px; padding: 20px; background: #f8fafc; border-radius: 12px; border: 2px solid #e2e8f0;">
+            <div id="aiResultsSection" style="display: none; margin-top: 25px; padding: 20px; background: #f8fafc; border-radius: 0; border: 2px solid #e2e8f0;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                     <h4 style="margin: 0; color: #1e293b;">✨ AI Results</h4>
                     <button onclick="applyAIResult()" 
-                            style="padding: 8px 20px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                            style="padding: 8px 20px; background: #10b981; color: white; border: none; border-radius: 0; font-weight: 600; cursor: pointer;">
                         📝 Apply to Document
                     </button>
                 </div>
-                <div id="aiResultContent" style="max-height: 400px; overflow-y: auto; padding: 15px; background: white; border-radius: 8px; border: 1px solid #e2e8f0; white-space: pre-wrap; line-height: 1.6;"></div>
+                <div id="aiResultContent" style="max-height: 400px; overflow-y: auto; padding: 15px; background: white; border-radius: 0; border: 1px solid #e2e8f0; white-space: pre-wrap; line-height: 1.6;"></div>
             </div>
         </div>
     </div>
@@ -1654,8 +1631,10 @@
     <script>
         console.log('🚀 CollabDocs Demo Starting...');
         
-        // API URL - Change this after deploying backend to Railway/Render
-        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        // API URL - when opening demo.html locally (file://) window.location.hostname is empty
+        // so treat empty hostname as localhost to point to the local backend during development.
+        const hostname = window.location.hostname;
+        const API_URL = (!hostname || hostname === 'localhost' || hostname === '127.0.0.1')
             ? 'http://localhost:5000'
             : 'https://clouddocs-production-e918.up.railway.app'; // Railway backend domain
         
@@ -2463,12 +2442,12 @@
                     showNotification('⏳ Rate limit hit. Please wait 30 seconds and try again.', 'warning');
                     panelBody.innerHTML = `
                         <div class="ai-empty">
-                            <p style="font-size: 2rem; margin-bottom: 10px;">⏳</p>
+                            <p style="font-size: 1.5rem; margin-bottom: 8px;">⏳</p>
                             <p><strong>Rate Limit Reached</strong></p>
-                            <p style="font-size: 0.9rem; margin-top: 10px; color: #94a3b8;">
+                            <p style="font-size: 0.875rem; margin-top: 10px; color: #94a3b8;">
                                 OpenAI has temporary rate limits. Please wait 30 seconds and try again.
                             </p>
-                            <button onclick="closeAIPanel()" style="margin-top: 20px; padding: 10px 20px; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem;">
+                            <button onclick="closeAIPanel()" style="margin-top: 16px; padding: 8px 16px; background: #475569; color: white; border: none; border-radius: 0; cursor: pointer; font-size: 0.875rem;">
                                 Got it
                             </button>
                         </div>
@@ -2477,9 +2456,9 @@
                     showNotification('❌ AI service error: ' + error.message, 'error');
                     panelBody.innerHTML = `
                         <div class="ai-empty">
-                            <p style="font-size: 2rem; margin-bottom: 10px;">⚠️</p>
+                            <p style="font-size: 1.5rem; margin-bottom: 8px;">⚠️</p>
                             <p><strong>AI Service Error</strong></p>
-                            <p style="font-size: 0.9rem; margin-top: 10px;">${error.message}</p>
+                            <p style="font-size: 0.875rem; margin-top: 10px;">${error.message}</p>
                             <p style="font-size: 0.85rem; margin-top: 10px; color: #94a3b8;">
                                 Make sure OPENAI_API_KEY is set and your API key has available credits.
                             </p>
@@ -2498,9 +2477,9 @@
             if (!suggestions || suggestions.length === 0) {
                 panelBody.innerHTML = `
                     <div class="ai-empty">
-                        <p style="font-size: 2rem; margin-bottom: 10px;">✅</p>
+                        <p style="font-size: 1.5rem; margin-bottom: 8px;">✅</p>
                         <p><strong>No Issues Found!</strong></p>
-                        <p style="font-size: 0.9rem; margin-top: 10px;">Your text looks great.</p>
+                        <p style="font-size: 0.875rem; margin-top: 10px;">Your text looks great.</p>
                         ${metadata.readabilityScore ? `<p style="font-size: 0.85rem; margin-top: 10px; color: #10b981;"><strong>Readability Score: ${metadata.readabilityScore}/100</strong></p>` : ''}
                     </div>
                 `;
@@ -2511,8 +2490,8 @@
             let statsHTML = '';
             if (metadata.readabilityScore || metadata.overallTone) {
                 statsHTML = `
-                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 12px; margin-bottom: 15px;">
-                        <h4 style="margin: 0 0 10px 0; font-size: 0.9rem;">📊 Document Analysis</h4>
+                    <div style="background: #475569; color: white; padding: 15px; border-radius: 0; margin-bottom: 15px;">
+                        <h4 style="margin: 0 0 10px 0; font-size: 0.875rem;">📊 Document Analysis</h4>
                         ${metadata.readabilityScore ? `<p style="margin: 5px 0; font-size: 0.85rem;">✅ Readability: ${metadata.readabilityScore}/100</p>` : ''}
                         ${metadata.overallTone ? `<p style="margin: 5px 0; font-size: 0.85rem;">🎭 Tone: ${metadata.overallTone}</p>` : ''}
                         ${metadata.provider ? `<p style="margin: 5px 0; font-size: 0.75rem; opacity: 0.9;">🤖 ${metadata.provider}</p>` : ''}
@@ -2565,7 +2544,7 @@
                     
                     suggestionsHTML += `
                         <div class="ai-suggestion-item" style="border-left: 3px solid ${severityColor};">
-                            ${suggestion.severity ? `<span style="display: inline-block; background: ${severityColor}; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; margin-bottom: 8px;">${suggestion.severity.toUpperCase()}</span>` : ''}
+                            ${suggestion.severity ? `<span style="display: inline-block; background: ${severityColor}; color: white; padding: 2px 8px; border-radius: 0; font-size: 0.7rem; margin-bottom: 8px;">${suggestion.severity.toUpperCase()}</span>` : ''}
                             
                             <div class="ai-suggestion-original">
                                 <strong>Current:</strong> <span style="${suggestion.formatting ? `color: ${suggestion.formatting.color}; text-decoration: ${suggestion.formatting.textDecoration || 'none'};` : ''}">${escapeHtml(suggestion.original)}</span>
@@ -2603,11 +2582,11 @@
             if (metadata.styleRecommendations) {
                 const style = metadata.styleRecommendations;
                 suggestionsHTML += `
-                    <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 15px; border-radius: 12px; margin-top: 15px;">
-                        <h4 style="margin: 0 0 10px 0; font-size: 0.9rem;">🎨 Document Styling Recommendations</h4>
+                    <div style="background: #059669; color: white; padding: 15px; border-radius: 0; margin-top: 15px;">
+                        <h4 style="margin: 0 0 10px 0; font-size: 0.875rem;">🎨 Document Styling Recommendations</h4>
                         ${style.headingFont ? `<p style="margin: 5px 0; font-size: 0.8rem;">📌 Headings: ${style.headingFont}</p>` : ''}
                         ${style.bodyFont ? `<p style="margin: 5px 0; font-size: 0.8rem;">📄 Body: ${style.bodyFont}</p>` : ''}
-                        ${style.emphasisColor ? `<p style="margin: 5px 0; font-size: 0.8rem;">⭐ Emphasis: <span style="color: ${style.emphasisColor}; background: white; padding: 2px 6px; border-radius: 3px;">${style.emphasisColor}</span></p>` : ''}
+                        ${style.emphasisColor ? `<p style="margin: 5px 0; font-size: 0.8rem;">⭐ Emphasis: <span style="color: ${style.emphasisColor}; background: white; padding: 2px 6px; border-radius: 0;">${style.emphasisColor}</span></p>` : ''}
                         ${style.sentenceComplexity ? `<p style="margin: 5px 0; font-size: 0.8rem;">💡 ${style.sentenceComplexity}</p>` : ''}
                         ${style.paragraphLength ? `<p style="margin: 5px 0; font-size: 0.8rem;">📏 ${style.paragraphLength}</p>` : ''}
                     </div>
@@ -2777,6 +2756,21 @@
                     });
                 }
 
+                // Check if response is OK
+                if (!response.ok) {
+                    const text = await response.text();
+                    console.error('❌ Server error:', response.status, text);
+                    throw new Error(`Server error: ${response.status} - ${text.substring(0, 200)}`);
+                }
+
+                // Check content type
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const text = await response.text();
+                    console.error('❌ Non-JSON response:', text.substring(0, 500));
+                    throw new Error('Server returned HTML instead of JSON. Check if backend is running.');
+                }
+
                 const data = await response.json();
 
                 if (!data.success) {
@@ -2814,7 +2808,7 @@
                     html = `
                         <div style="space-y: 15px;">
                             ${analysis.readability_score ? `
-                                <div style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                                <div style="background: #2563eb; color: white; padding: 15px; border-radius: 0; margin-bottom: 15px;">
                                     <h4 style="margin: 0 0 8px 0;">📊 Readability Score</h4>
                                     <p style="font-size: 2rem; font-weight: bold; margin: 0;">${analysis.readability_score}/100</p>
                                 </div>
@@ -2830,7 +2824,7 @@
                             ${analysis.tone ? `
                                 <div style="margin-bottom: 15px;">
                                     <h4 style="color: #1e293b; margin-bottom: 8px;">🎭 Detected Tone</h4>
-                                    <span style="background: #dbeafe; color: #1e40af; padding: 6px 12px; border-radius: 20px; font-weight: 600;">${analysis.tone}</span>
+                                    <span style="background: #dbeafe; color: #1e40af; padding: 6px 12px; border-radius: 0; font-weight: 600;">${analysis.tone}</span>
                                 </div>
                             ` : ''}
                             
@@ -2845,7 +2839,7 @@
                                 <div style="margin-bottom: 15px;">
                                     <h4 style="color: #1e293b; margin-bottom: 8px;">🔑 Keywords</h4>
                                     <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                                        ${analysis.keywords.map(k => `<span style="background: #f1f5f9; padding: 4px 10px; border-radius: 15px; font-size: 0.9rem;">${k}</span>`).join('')}
+                                        ${analysis.keywords.map(k => `<span style="background: #f1f5f9; padding: 4px 10px; border-radius: 0; font-size: 0.875rem;">${k}</span>`).join('')}
                                     </div>
                                 </div>
                             ` : ''}
@@ -2863,17 +2857,17 @@
                                 <div style="margin-bottom: 15px;">
                                     <h4 style="color: #1e293b; margin-bottom: 8px;">💡 Improvements</h4>
                                     ${analysis.improvements.map(imp => `
-                                        <div style="background: #fef3c7; padding: 12px; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid #f59e0b;">
+                                        <div style="background: #fef3c7; padding: 12px; border-radius: 0; margin-bottom: 8px; border-left: 4px solid #f59e0b;">
                                             <p style="font-weight: 600; color: #92400e; margin: 0 0 5px 0;">${imp.type}: ${imp.issue}</p>
-                                            <p style="color: #78350f; margin: 0; font-size: 0.9rem;">${imp.suggestion}</p>
-                                            <span style="background: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; color: #b45309; margin-top: 5px; display: inline-block;">Priority: ${imp.priority}</span>
+                                            <p style="color: #78350f; margin: 0; font-size: 0.875rem;">${imp.suggestion}</p>
+                                            <span style="background: white; padding: 2px 8px; border-radius: 0; font-size: 0.75rem; color: #b45309; margin-top: 5px; display: inline-block;">Priority: ${imp.priority}</span>
                                         </div>
                                     `).join('')}
                                 </div>
                             ` : ''}
                             
                             ${analysis.suggestions ? `
-                                <div style="background: #dcfce7; padding: 15px; border-radius: 10px; border-left: 4px solid #10b981;">
+                                <div style="background: #dcfce7; padding: 15px; border-radius: 0; border-left: 4px solid #10b981;">
                                     <h4 style="color: #1e293b; margin: 0 0 10px 0;">💡 AI Suggestions</h4>
                                     ${analysis.suggestions.title ? `<p style="margin: 5px 0;"><strong>Title:</strong> ${analysis.suggestions.title}</p>` : ''}
                                     ${analysis.suggestions.opening ? `<p style="margin: 5px 0;"><strong>Opening:</strong> ${analysis.suggestions.opening}</p>` : ''}
@@ -2894,10 +2888,10 @@
                 const result = data.result;
                 if (Array.isArray(result)) {
                     html = result.map((alt, idx) => `
-                        <div style="background: #f8fafc; padding: 15px; border-radius: 10px; margin-bottom: 12px; border-left: 4px solid #3b82f6;">
+                        <div style="background: #f8fafc; padding: 15px; border-radius: 0; margin-bottom: 12px; border-left: 4px solid #3b82f6;">
                             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
                                 <h4 style="margin: 0; color: #1e293b;">${alt.version || `Alternative ${idx + 1}`}</h4>
-                                <span style="background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem;">${alt.style || 'N/A'}</span>
+                                <span style="background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 0; font-size: 0.8rem;">${alt.style || 'N/A'}</span>
                             </div>
                             <p style="color: #475569; line-height: 1.6; margin: 10px 0;">${alt.text}</p>
                             ${alt.explanation ? `<p style="color: #64748b; font-size: 0.85rem; font-style: italic; margin: 8px 0 0 0;">💡 ${alt.explanation}</p>` : ''}
@@ -3269,13 +3263,13 @@
             const cursor = document.createElement('div');
             cursor.className = 'user-cursor';
             cursor.dataset.userId = data.userId;
-            cursor.style.backgroundColor = data.userColor || '#8b5cf6';
+            cursor.style.backgroundColor = data.userColor || '#64748b';
 
             // Create label
             const label = document.createElement('div');
             label.className = 'user-cursor-label';
             label.textContent = data.userName;
-            label.style.background = data.userColor || '#8b5cf6';
+            label.style.background = data.userColor || '#64748b';
             
             cursor.appendChild(label);
             
@@ -3375,3 +3369,20 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

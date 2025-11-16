@@ -20,13 +20,14 @@ router.post('/api/ai/advanced', async (req, res) => {
 
         console.log('🤖 Advanced AI request:', { task, toneTarget, length, textLength: text?.length || 0 });
 
+        const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
         const GROQ_API_KEY = process.env.GROQ_API_KEY;
         const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-        if (!GROQ_API_KEY && !OPENAI_API_KEY) {
+        if (!GEMINI_API_KEY && !GROQ_API_KEY && !OPENAI_API_KEY) {
             return res.status(500).json({ 
                 success: false, 
-                error: 'AI service not configured. Please add GROQ_API_KEY or OPENAI_API_KEY to environment.' 
+                error: 'AI service not configured. Please add GEMINI_API_KEY, GROQ_API_KEY or OPENAI_API_KEY to environment.' 
             });
         }
 
@@ -96,16 +97,37 @@ router.post('/api/ai/advanced', async (req, res) => {
                 });
         }
 
-        // Try Groq first (faster and free)
+        // Try Gemini first (fastest and most reliable)
         let result = null;
-        let provider = 'groq';
+        let provider = 'gemini';
 
-        if (GROQ_API_KEY) {
+        if (GEMINI_API_KEY) {
             try {
+                const { GoogleGenerativeAI } = require('@google/generative-ai');
+                const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+                const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+
+                const fullPrompt = `${systemPrompt}\n\n${userMessage}`;
+                
+                const geminiResult = await model.generateContent(fullPrompt);
+                const response = await geminiResult.response;
+                result = response.text();
+                
+                console.log('✅ Gemini AI response received');
+            } catch (geminiError) {
+                console.error('❌ Gemini AI error:', geminiError.message);
+                provider = 'groq'; // Fallback to Groq
+            }
+        }
+
+        // Fallback to Groq if Gemini fails or not configured
+        if (!result && GROQ_API_KEY) {
+            try {
+                provider = 'groq';
                 const groqResponse = await axios.post(
                     'https://api.groq.com/openai/v1/chat/completions',
                     {
-                        model: 'llama-3.1-70b-versatile', // Large model for complex tasks
+                        model: 'llama-3.3-70b-versatile', // Updated to currently supported model
                         messages: [
                             { role: 'system', content: systemPrompt },
                             { role: 'user', content: userMessage }
@@ -125,7 +147,7 @@ router.post('/api/ai/advanced', async (req, res) => {
                 result = groqResponse.data?.choices?.[0]?.message?.content || '';
                 console.log('✅ Groq advanced AI response received');
             } catch (groqError) {
-                console.error('❌ Groq advanced AI error:', groqError.message);
+                console.error('❌ Groq advanced AI error:', groqError.response?.status, groqError.response?.data || groqError.message);
                 
                 // Fallback to OpenAI if Groq fails
                 if (OPENAI_API_KEY) {
@@ -212,10 +234,13 @@ router.post('/api/ai/advanced', async (req, res) => {
         });
 
     } catch (error) {
-        console.error('❌ Advanced AI error:', error.message);
-        res.status(500).json({
+        console.error('❌ Advanced AI error:', error.response?.status, error.response?.data || error.message);
+        
+        // Ensure we always return JSON, never HTML
+        return res.status(500).json({
             success: false,
-            error: 'AI processing failed: ' + error.message
+            error: error.response?.data?.error?.message || error.message || 'AI processing failed',
+            details: error.response?.status ? `HTTP ${error.response.status}` : 'Unknown error'
         });
     }
 });
@@ -269,7 +294,7 @@ router.post('/api/ai/analyze', async (req, res) => {
         const groqResponse = await axios.post(
             'https://api.groq.com/openai/v1/chat/completions',
             {
-                model: 'llama-3.1-70b-versatile',
+                model: 'llama-3.3-70b-versatile',
                 messages: [
                     { role: 'system', content: systemPrompt },
                     { role: 'user', content: userMessage }

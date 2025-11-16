@@ -2,9 +2,20 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const session = require('express-session');
-const passport = require('passport');
+// const passport = require('passport'); // DISABLED FOR DEMO MODE
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
+
+// Global error handlers
+process.on('uncaughtException', (err) => {
+  console.error('\n❌ UNCAUGHT EXCEPTION:', err);
+  console.error('Stack:', err.stack);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('\n❌ UNHANDLED REJECTION at:', promise);
+  console.error('Reason:', reason);
+});
 
 const app = express();
 const http = require('http').createServer(app);
@@ -27,7 +38,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Session configuration
+// Session configuration (minimal for demo)
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key-change-in-production',
   resave: false,
@@ -38,9 +49,10 @@ app.use(session({
   }
 }));
 
-// Initialize Passport
-app.use(passport.initialize());
-app.use(passport.session());
+// Passport disabled for DEMO MODE
+// app.use(passport.initialize());
+// app.use(passport.session());
+console.log('⚠️  Auth middleware not available, running without authentication');
 
 // Mount Auth routes (COMMENTED OUT FOR DEMO MODE - No GitHub OAuth required)
 // const authRoutes = require('./routes/auth');
@@ -311,7 +323,10 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-http.listen(PORT, () => {
+
+console.log(`\n🔧 Attempting to start server on port ${PORT}...`);
+
+http.listen(PORT, '0.0.0.0', () => {
   console.log('='.repeat(50));
   console.log('🚀 CollabDocs Backend Server');
   console.log('='.repeat(50));
@@ -320,4 +335,18 @@ http.listen(PORT, () => {
   console.log(`⚠️  MODE: DEMO (In-memory storage, no Firebase)`);
   console.log(`✅ Health check: http://localhost:${PORT}/health`);
   console.log('='.repeat(50));
+}).on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\n❌ ERROR: Port ${PORT} is already in use!`);
+    console.error('💡 Try: Stop-Process -Name "node" -Force\n');
+    process.exit(1);
+  } else {
+    console.error('\n❌ Server error:', err);
+    console.error('Code:', err.code);
+    console.error('Message:', err.message);
+    process.exit(1);
+  }
+}).on('listening', () => {
+  const addr = http.address();
+  console.log(`✅ Server is actually listening on ${addr.address}:${addr.port}`);
 });
