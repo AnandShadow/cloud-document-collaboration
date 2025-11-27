@@ -2061,7 +2061,14 @@
             console.log('🚀 Initializing app...');
             try {
                 initializeEditor();
-                connectSocket();
+                // Only connect socket if on localhost (not Vercel)
+                if (hostname === 'localhost' || hostname === '127.0.0.1' || !hostname) {
+                    connectSocket();
+                } else {
+                    console.log('⚠️ Socket.IO disabled on Vercel - using HTTP only');
+                    document.querySelector('.status-dot').style.background = '#F59E0B';
+                    showNotification('⚠️ Real-time features disabled - HTTP mode', 'warning');
+                }
                 loadDocuments();
                 console.log('✅ All initialization complete');
             } catch (error) {
@@ -2439,6 +2446,11 @@
                 });
                 
                 console.log('Save response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const data = await response.json();
                 console.log('Save response data:', data);
                 
