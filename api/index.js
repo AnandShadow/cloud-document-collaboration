@@ -11,6 +11,18 @@ app.use(express.json());
 // In-memory storage for demo
 const documents = new Map();
 
+// Initialize with a default document
+const defaultDocId = 'default-welcome-doc';
+documents.set(defaultDocId, {
+  id: defaultDocId,
+  title: 'Welcome to CollabDocs',
+  content: '<h1>Welcome to CollabDocs!</h1><p>This is a demo document. You can edit it, or create new ones.</p><p><strong>Note:</strong> Since this is a serverless demo, data resets frequently.</p>',
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  owner: 'demo-user',
+  collaborators: []
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'CollabDocs API is running on Vercel' });
