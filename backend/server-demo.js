@@ -350,3 +350,6 @@ http.listen(PORT, '0.0.0.0', () => {
   const addr = http.address();
   console.log(`✅ Server is actually listening on ${addr.address}:${addr.port}`);
 });
+
+// Export for Vercel serverless
+module.exports = app;

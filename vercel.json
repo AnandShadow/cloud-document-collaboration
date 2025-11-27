@@ -2,26 +2,33 @@
   "version": 2,
   "builds": [
     {
-      "src": "backend/server-demo.js",
+      "src": "api/index.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "demo.html",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "backend/server-demo.js"
+      "dest": "/api/index.js"
     },
     {
       "src": "/health",
-      "dest": "backend/server-demo.js"
+      "dest": "/api/index.js"
     },
     {
       "src": "/socket.io/(.*)",
-      "dest": "backend/server-demo.js"
+      "dest": "/api/index.js"
     },
     {
       "src": "/(.*)",
-      "dest": "demo.html"
+      "dest": "/demo.html"
     }
-  ]
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
 }
