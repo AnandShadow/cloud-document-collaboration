@@ -71,7 +71,7 @@ app.delete('/api/documents/:id', (req, res) => {
 app.post('/api/ai/advanced', async (req, res) => {
   try {
     const { task, content, tone } = req.body;
-    
+
     // Simple mock responses for demo
     const responses = {
       generate: 'This is AI-generated content based on your input.',
@@ -83,9 +83,9 @@ app.post('/api/ai/advanced', async (req, res) => {
       tone: content ? `Changed to ${tone || 'professional'} tone: ${content}` : 'Please provide content.',
       complete: content ? `${content} [AI completion...]` : 'Please provide content to complete.'
     };
-    
-    res.json({ 
-      success: true, 
+
+    res.json({
+      success: true,
       result: responses[task] || 'Task completed successfully.',
       provider: 'demo'
     });
@@ -105,6 +105,42 @@ app.post('/api/ai/analyze', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+
+// AI Proofread endpoints (Mock implementation for demo)
+const handleProofread = (req, res) => {
+  // Return a success response with no issues found to avoid breaking document with invalid indices
+  res.json({
+    ok: true,
+    provider: 'Demo AI',
+    readabilityScore: 85,
+    overallTone: 'Professional',
+    suggestions: [],
+    styleRecommendations: {
+      headingFont: 'Inter, sans-serif',
+      bodyFont: 'Inter, sans-serif',
+      emphasisColor: '#2563EB',
+      sentenceComplexity: 'Good mix of sentence lengths',
+      paragraphLength: 'Well-structured paragraphs'
+    }
+  });
+};
+
+app.post('/api/ai/proofread-groq', handleProofread);
+app.post('/api/ai/proofread-languagetool', handleProofread);
+app.post('/api/ai/proofread-cloud', handleProofread);
+
+// Mock Auth endpoints
+app.get('/auth/user', (req, res) => {
+  res.json({ authenticated: false });
+});
+
+app.post('/auth/logout', (req, res) => {
+  res.json({ success: true });
+});
+
+app.get('/auth/github', (req, res) => {
+  res.redirect('/');
 });
 
 module.exports = app;
