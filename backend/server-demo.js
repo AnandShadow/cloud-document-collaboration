@@ -73,8 +73,8 @@ const users = new Map();
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.status(200).json({ 
-    status: 'OK', 
+  res.status(200).json({
+    status: 'OK',
     timestamp: new Date().toISOString(),
     mode: 'DEMO MODE - No Firebase'
   });
@@ -85,8 +85,8 @@ app.post('/api/auth/register', (req, res) => {
   const { email, password, displayName } = req.body;
   const userId = Date.now().toString();
   users.set(email, { userId, email, displayName, password });
-  res.json({ 
-    success: true, 
+  res.json({
+    success: true,
     user: { userId, email, displayName },
     token: 'demo-token-' + userId
   });
@@ -96,8 +96,8 @@ app.post('/api/auth/login', (req, res) => {
   const { email, password } = req.body;
   const user = users.get(email);
   if (user && user.password === password) {
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       user: { userId: user.userId, email: user.email, displayName: user.displayName },
       token: 'demo-token-' + user.userId
     });
@@ -185,50 +185,51 @@ io.on('connection', (socket) => {
   console.log('✅ User connected:', socket.id);
 
   socket.on('join-document', ({ documentId, userId, userName, userColor }) => {
-    console.log(`👤 User ${userName} (${socket.id}) joined document ${documentId}`);
     socket.join(documentId);
-    
-    // Assign random color if not provided
-    if (!userColor) {
-      userColor = userColors[Math.floor(Math.random() * userColors.length)];
-    }
-    
-    // Store user info
+
     if (!activeUsers.has(documentId)) {
       activeUsers.set(documentId, new Map());
     }
-    activeUsers.get(documentId).set(socket.id, { 
-      userId: userId || socket.id, 
-      userName: userName || 'Anonymous', 
-      socketId: socket.id,
-      userColor: userColor,
-      isTyping: false
-    });
-    
-    // Get all users in this document
-    const users = Array.from(activeUsers.get(documentId).values());
-    
-    // Notify others that user joined
-    socket.to(documentId).emit('user-joined', { 
-      userId: userId || socket.id, 
+
+    // Remove existing entry for this socket if any
+    const usersMap = activeUsers.get(documentId);
+    if (usersMap.has(socket.id)) {
+      usersMap.delete(socket.id);
+    }
+
+    const newUser = {
+      userId: userId || socket.id,
       userName: userName || 'Anonymous',
-      userColor: userColor,
+      socketId: socket.id,
+      userColor: userColor || userColors[Math.floor(Math.random() * userColors.length)],
+      isTyping: false
+    };
+
+    usersMap.set(socket.id, newUser);
+
+    // Get all users in this document
+    const users = Array.from(usersMap.values());
+
+    // Notify others that user joined
+    socket.to(documentId).emit('user-joined', {
+      userId: newUser.userId,
+      userName: newUser.userName,
+      userColor: newUser.userColor,
       users: users
     });
-    
+
     // Send current users list to the new user
     socket.emit('active-users', { users: users });
-    
+
+    console.log(`👤 User ${userName} (${socket.id}) joined document ${documentId}`);
     console.log(`📊 Active users in ${documentId}:`, users.length);
   });
 
   socket.on('document-change', ({ documentId, content, delta, userName }) => {
-    console.log(`📝 Document update in ${documentId} by ${userName}`);
-    
-    // Broadcast to all other users in the room
-    socket.to(documentId).emit('document-update', { 
-      content, 
-      delta, 
+    // Broadcast the change to all other users in the document
+    socket.to(documentId).emit('document-update', {
+      content,
+      delta,
       userId: socket.id,
       userName: userName || 'Anonymous',
       timestamp: Date.now(),
@@ -237,8 +238,6 @@ io.on('connection', (socket) => {
   });
 
   socket.on('cursor-move', ({ documentId, range, userName, userColor }) => {
-    console.log(`🖱️ Cursor move in ${documentId} by ${userName}`);
-    
     // Broadcast cursor position to others
     socket.to(documentId).emit('cursor-update', {
       userId: socket.id,
@@ -250,13 +249,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('typing-start', ({ documentId, userName }) => {
-    console.log(`⌨️ ${userName} started typing in ${documentId}`);
-    
     if (activeUsers.has(documentId) && activeUsers.get(documentId).has(socket.id)) {
       const user = activeUsers.get(documentId).get(socket.id);
       user.isTyping = true;
     }
-    
+
     socket.to(documentId).emit('user-typing', {
       userId: socket.id,
       userName: userName || 'Anonymous',
@@ -269,7 +266,7 @@ io.on('connection', (socket) => {
       const user = activeUsers.get(documentId).get(socket.id);
       user.isTyping = false;
     }
-    
+
     socket.to(documentId).emit('user-typing', {
       userId: socket.id,
       isTyping: false
@@ -279,38 +276,48 @@ io.on('connection', (socket) => {
   socket.on('leave-document', ({ documentId, userId }) => {
     console.log(`👋 User ${userId} left document ${documentId}`);
     socket.leave(documentId);
-    
+
     if (activeUsers.has(documentId)) {
-      const users = activeUsers.get(documentId);
-      const user = users.get(socket.id);
-      users.delete(socket.id);
-      
+      const usersMap = activeUsers.get(documentId);
+      const user = usersMap.get(socket.id);
+      usersMap.delete(socket.id);
+
+      const users = Array.from(usersMap.values());
+
       // Notify others
-      socket.to(documentId).emit('user-left', { 
+      socket.to(documentId).emit('user-left', {
         userId: userId || socket.id,
         userName: user?.userName || 'Anonymous',
-        users: Array.from(users.values())
+        users: users
       });
+
+      // Update active users list for everyone remaining
+      io.to(documentId).emit('active-users', { users: users });
     }
   });
 
   socket.on('disconnect', () => {
     console.log('❌ User disconnected:', socket.id);
-    
+
     // Remove user from all documents they were in
-    activeUsers.forEach((users, documentId) => {
-      if (users.has(socket.id)) {
-        const user = users.get(socket.id);
-        users.delete(socket.id);
-        
+    activeUsers.forEach((usersMap, documentId) => {
+      if (usersMap.has(socket.id)) {
+        const user = usersMap.get(socket.id);
+        usersMap.delete(socket.id);
+
+        const users = Array.from(usersMap.values());
+
         // Notify others in the document
-        io.to(documentId).emit('user-left', { 
+        io.to(documentId).emit('user-left', {
           userId: user.userId,
           userName: user.userName,
-          users: Array.from(users.values())
+          users: users
         });
-        
-        console.log(`📊 Users remaining in ${documentId}:`, users.size);
+
+        // Update active users list
+        io.to(documentId).emit('active-users', { users: users });
+
+        console.log(`📊 Users remaining in ${documentId}:`, users.length);
       }
     });
   });
