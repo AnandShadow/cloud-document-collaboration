@@ -3483,8 +3483,35 @@
                     }
                 }
 
-                // Initialize shared document on load
+                // Initialize app on page load
                 window.addEventListener('DOMContentLoaded', () => {
+                    console.log('🚀 Page loaded, initializing app...');
+                    
+                    // Initialize Quill editor
+                    quill = new Quill('#editor', {
+                        theme: 'snow',
+                        modules: {
+                            toolbar: [
+                                [{ 'header': [1, 2, 3, false] }],
+                                ['bold', 'italic', 'underline', 'strike'],
+                                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                                [{ 'color': [] }, { 'background': [] }],
+                                [{ 'align': [] }],
+                                ['link', 'image'],
+                                ['clean']
+                            ]
+                        },
+                        placeholder: 'Start writing your document...'
+                    });
+                    
+                    // Attach text-change handler
+                    quill.on('text-change', handleTextChange);
+                    console.log('✅ Quill editor initialized');
+                    
+                    // Load documents
+                    loadDocuments();
+                    
+                    // Check for shared document
                     checkForSharedDocument();
                 });
     </script>
