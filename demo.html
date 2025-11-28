@@ -1999,6 +1999,43 @@
         const AUTO_SAVE_INTERVAL = 0; // Auto-save every 0 seconds (was 10)
         let autoSaveCountdown = 0; // Countdown in seconds
 
+        // Load documents from API
+        async function loadDocuments() {
+            try {
+                console.log('📂 Loading documents from:', `${API_URL}/api/documents`);
+                const response = await fetch(`${API_URL}/api/documents`);
+                const data = await response.json();
+                documents = data.documents || [];
+                renderDocuments();
+                document.getElementById('totalDocs').textContent = documents.length;
+                console.log(`📊 Total documents: ${documents.length}`);
+            } catch (error) {
+                console.error('Error loading documents:', error);
+                showNotification('❌ Cannot connect to server - Is backend running?', 'error');
+            }
+        }
+
+        // Render documents grid
+        function renderDocuments() {
+            const grid = document.getElementById('documentsGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = '<div class="doc-card create-doc" onclick="createDocument()"><div style="font-size: 3rem;">📄</div><div style="margin-top: 8px; font-weight: 600;">New Document</div></div>';
+            
+            documents.forEach(doc => {
+                const card = document.createElement('div');
+                card.className = 'doc-card';
+                card.onclick = () => openDocument(doc.id);
+                card.innerHTML = `
+                    <div class="doc-card-title">${doc.title || 'Untitled'}</div>
+                    <div class="doc-card-meta">
+                        <span>📅 ${new Date(doc.updatedAt).toLocaleDateString()}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
         // Named text-change handler (global scope for re-attachment)
         const handleTextChange = (delta, oldDelta, source) => {
             console.log('✏️ Text change detected - Source:', source, 'DocId:', currentDocId, 'Connected:', socket?.connected);
