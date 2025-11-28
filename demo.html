@@ -464,6 +464,12 @@
             position: relative;
             overflow: hidden;
         }
+        
+        .create-doc::before {
+            content: '📄';
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
 
         .create-doc::after {
             content: '+ New Document';
@@ -2017,11 +2023,18 @@
 
         // Render documents grid
         function renderDocuments() {
+            console.log('🎨 Rendering documents grid...');
             const grid = document.getElementById('documentsGrid');
-            if (!grid) return;
+            if (!grid) {
+                console.error('❌ documentsGrid not found!');
+                return;
+            }
             
-            grid.innerHTML = '<div class="doc-card create-doc" onclick="createDocument()"><div style="font-size: 3rem;">📄</div><div style="margin-top: 8px; font-weight: 600;">New Document</div></div>';
+            // Clear grid and add create button
+            grid.innerHTML = '<div class="doc-card create-doc" onclick="createDocument()"></div>';
+            console.log('✅ Create document button added');
             
+            // Add existing documents
             documents.forEach(doc => {
                 const card = document.createElement('div');
                 card.className = 'doc-card';
