@@ -1,0 +1,232 @@
+# CollabDocs - Real-time Collaborative Document Editor
+
+Build a modern, professional **real-time collaborative document editor** web application with AI assistance capabilities. The app should have a clean, enterprise SaaS aesthetic similar to Notion, Linear, or GitHub.
+
+## Core Features
+
+### 1. **Document Management Dashboard**
+- Clean grid layout showing all user documents
+- Large "New Document" card with document icon (📄) for creating new docs
+- Each document card shows:
+  - Document title
+  - Creation/update date
+  - Click to open
+- Stats bar showing:
+  - Total documents count
+  - Active users count
+  - Last activity timestamp
+
+### 2. **Rich Text Editor**
+- Powered by Quill.js editor with full formatting toolbar
+- Features:
+  - Headers (H1, H2, H3)
+  - Text formatting (bold, italic, underline, strikethrough)
+  - Lists (ordered, bullet)
+  - Colors and backgrounds
+  - Text alignment
+  - Links and images
+  - Code blocks
+- Editable document title input at top
+- Auto-save functionality (every 10 seconds, with toggle)
+- Manual save button
+- Real-time character count
+
+### 3. **Real-time Collaboration (Socket.IO)**
+- Multiple users can edit same document simultaneously
+- Live cursor positions for other users
+- User presence indicators showing who's active
+- Color-coded user badges
+- Typing indicators
+- Instant content synchronization
+- Change highlights when others edit
+
+### 4. **AI Assistant Features**
+
+**Basic AI Proofread:**
+- Grammar checking
+- Spelling corrections
+- Style suggestions
+- Tone analysis
+- Inline suggestions with apply/dismiss buttons
+
+**Advanced AI Assistant (Modal):**
+- **Improve Writing** - Fix grammar, clarity, flow
+- **Rewrite** - Complete rewrite maintaining meaning
+- **Generate Document** - Create from scratch with prompt
+- **Expand** - Add details and examples
+- **Summarize** - Create concise summary
+- **Suggest Alternatives** - Multiple ways to phrase text
+- **Change Tone** - Adjust style (professional, casual, academic, creative, persuasive, friendly)
+- **Auto-Complete** - Continue partial text
+- **Analyze Document** - Full analysis with:
+  - Readability score (0-100)
+  - Word count and reading time
+  - Detected tone
+  - Keywords extraction
+  - Strengths and weaknesses
+  - Improvement suggestions with priority levels
+  - Style recommendations
+
+Options for AI tasks:
+- Tone selection (professional, casual, academic, creative, persuasive, friendly)
+- Length (short, medium, long)
+- Additional context input
+
+### 5. **Share & Collaboration**
+- Generate shareable links
+- Share via:
+  - Email
+  - WhatsApp
+  - Slack
+  - Direct link copy
+- Anyone with link can view/edit in real-time
+
+### 6. **Document Export**
+Support multiple download formats:
+- **Word (.docx)** - Microsoft Word compatible
+- **PDF (.pdf)** - Via browser print dialog
+- **Text (.txt)** - Plain text
+- **HTML (.html)** - Styled web page
+- **Markdown (.md)** - Markdown format
+- **JSON (.json)** - Quill Delta format with metadata
+
+## Design Specifications
+
+### Color Palette (Professional SaaS)
+```
+Primary: #2563EB (Strong Blue)
+Secondary: #1E40AF (Deep Blue)
+Accent: #06B6D4 (Teal Highlight)
+Success: #10B981 (Green)
+Warning: #F59E0B (Amber)
+Error: #EF4444 (Red)
+Neutral Light: #F4F7FA (Background)
+Neutral Dark: #1F2937 (Text)
+```
+
+### UI Principles
+- **Flat design** - NO gradients, NO animations
+- **Sharp corners** - border-radius: 0 (no curves)
+- **Minimal shadows** - 0 1px 3px rgba(0,0,0,0.1)
+- **Professional typography** - System fonts (-apple-system, Segoe UI, Roboto)
+- **Icon-only buttons** - Use emoji icons (🔗📥🤖✨💾) with tooltips
+- **Compact spacing** - Tight, efficient layout
+- **Subtle hover states** - filter: brightness(0.95)
+
+### Layout Structure
+
+**Navbar:**
+- Logo icon (C in blue square)
+- "CollabDocs" title
+- Right side: Status dot (green/yellow/red) + User avatar + Username
+
+**Dashboard:**
+- Header with "📁 My Documents"
+- Stats bar (total docs, active users, last activity)
+- Grid of document cards (create button + existing docs)
+
+**Editor:**
+- Document title input (editable)
+- Auto-save status indicator
+- Icon-only action buttons toolbar:
+  - Share (🔗)
+  - Download (📥)
+  - AI Proofread (🤖)
+  - AI Assistant (✨)
+  - Save (💾)
+  - Auto-save toggle dropdown
+  - Back (←)
+- Quill editor area
+- Active users bar at bottom
+
+### Modals
+
+**Share Modal:**
+- Title: "🔗 Share Document"
+- Shareable link input with copy button
+- Share options grid (Email, WhatsApp, Slack)
+- Real-time collaboration info box
+
+**Download Modal:**
+- Title: "📥 Download Document"
+- 2x3 grid of format buttons
+- Each shows icon, format name, description
+- Info box with download features
+
+**AI Assistant Modal:**
+- Title: "✨ AI Assistant"
+- Task dropdown (9 options)
+- Conditional prompt input (for Generate task)
+- Tone and length selectors
+- Additional context textarea
+- Process button
+- Results section with apply button
+
+## Mobile Responsive
+
+### Tablet (≤768px)
+- Stack dashboard into single column
+- Larger touch targets (44x44px)
+- Sticky toolbar
+- Horizontal scrollable button bar
+
+### Mobile (≤480px)
+- Full-width modals
+- Edge-to-edge content
+- Larger text (16px minimum)
+- Optimized spacing
+- Vertical stacking
+
+## Technical Stack
+
+**Frontend:**
+- HTML5, CSS3, Vanilla JavaScript
+- Quill.js for rich text editing
+- Socket.IO client for real-time
+
+**Backend API Endpoints:**
+```
+GET  /api/documents          - List all documents
+POST /api/documents          - Create new document
+GET  /api/documents/:id      - Get document
+PUT  /api/documents/:id      - Update document
+POST /api/ai/proofread       - AI grammar check
+POST /api/ai/advanced        - Advanced AI tasks
+POST /api/ai/analyze         - Document analysis
+```
+
+**Socket.IO Events:**
+```
+join-document    - Join document room
+leave-document   - Leave document room
+document-change  - Broadcast text changes
+cursor-move      - Broadcast cursor position
+typing-start     - User started typing
+typing-stop      - User stopped typing
+user-joined      - User joined document
+user-left        - User left document
+```
+
+## Key Interactions
+
+1. **Create Document:** Click "📄 New Document" card → Opens blank editor
+2. **Edit Document:** Type → Auto-debounce 300ms → Broadcast to other users
+3. **Auto-save:** Every 10 seconds (if enabled) → Silent save
+4. **Manual Save:** Click 💾 → Shows success notification
+5. **AI Proofread:** Click 🤖 → Panel slides in with suggestions → Apply/dismiss each
+6. **AI Assistant:** Click ✨ → Modal opens → Select task → Configure → Process → Review results → Apply to doc
+7. **Share:** Click 🔗 → Modal with shareable link → Copy or share via platforms
+8. **Download:** Click 📥 → Modal with format grid → Click format → Downloads instantly
+9. **Real-time:** User types → Debounced broadcast → Other users see changes with highlights
+
+## Success Criteria
+
+- Clean, professional SaaS aesthetic (no cartoon-y elements)
+- Smooth real-time collaboration with no lag
+- Comprehensive AI features with good UX
+- Mobile-responsive and touch-friendly
+- Fast load times and smooth interactions
+- Accessible (WCAG AA compliant)
+- Works offline (basic functionality)
+
+Build this as a modern, production-ready collaborative document editor that rivals Google Docs in functionality but with added AI superpowers.
